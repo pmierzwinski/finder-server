@@ -1,0 +1,21 @@
+scraper:
+  sites:
+    - id: youtube
+      name: youtube
+      url: "https://www.youtube.com/gaming"
+      videoGroup: "#content"
+      urlSelector: "#content"
+      titleSelector: "#content"
+      descriptionSelector: "#content"
+      imageSelector: "#content"
+      verificationCondition: "consent"
+      verificationSelector: "consent"
+
+    - id: youtube
+      name: youtube
+      url: "https://www.youtube.com/gaming"
+      videoGroup: "#content"
+      urlSelector: "#content"
+      titleSelector: "#content"
+      descriptionSelector: "#content"
+      imageSelector: "#content"
