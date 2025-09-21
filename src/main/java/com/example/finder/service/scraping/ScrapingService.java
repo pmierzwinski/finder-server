@@ -1,0 +1,147 @@
+package com.example.finder.service.scraping;
+
+import com.example.finder.config.Config;
+import com.example.finder.model.Video;
+import com.example.finder.repository.VideosRepository;
+import lombok.Getter;
+import lombok.Setter;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+
+@Service
+@Getter
+public class ScrapingService {
+
+    private static final Logger log = LoggerFactory.getLogger(ScrapingService.class);
+    private final VideosRepository repository;
+
+    @Setter
+    private Config Xconfig;
+    private Config.Site config;
+
+    private WebDriver driver;
+
+    public ScrapingService(Config Xconfig, VideosRepository repository) {
+        this.repository = repository;
+        this.Xconfig = Xconfig;
+    }
+
+    public void scrapeTopVideos() throws InterruptedException {
+        initDriver();
+        try {
+            for (Config.Site xxxConfig : Xconfig.getSites()) {
+                config = xxxConfig;
+                connect();
+                verify();
+                saveVideos();
+            }
+        } finally {
+            driver.quit();
+        }
+    }
+
+    private void connect() throws InterruptedException {
+        log.info("connecting to " + config.getDataUrl());
+        driver.get(config.getDataUrl());
+        Thread.sleep(2000);
+    }
+
+    private void verify() throws InterruptedException {
+        try {
+            log.info("verifying policy");
+            WebElement btn = findAcceptButton();
+            if(btn == null) {
+                log.info("no accept button found");
+                return;
+            }
+            log.info("clicking accept button");
+            btn.click();
+            Thread.sleep(2000);
+        } catch (NoSuchElementException ignored) {}
+    }
+
+    private void saveVideos() {
+        String html = driver.getPageSource();
+        List<Video> videos = extractVideos(html);
+
+        for (Video video : videos) {
+            log.info(video.toString());
+        }
+
+        repository.saveAll(videos);
+    }
+
+    public void initDriver() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                "Chrome/117.0.0.0 Safari/537.36");
+
+        driver = new ChromeDriver(options);
+    }
+
+    private WebElement findAcceptButton() {//todo
+        List<WebElement> buttons = driver.findElements(By.cssSelector("span"));
+        for (WebElement btn : buttons) {
+            if (btn.getText().contains("Zaakceptuj wszystko")) {
+                return btn;
+            }
+        }
+        return null;
+    }
+
+
+    private List<Video> extractVideos(String html) {
+        log.info("extracting videos from html");
+        List<Video> videos = new java.util.ArrayList<>(List.of());
+        Document doc = Jsoup.parse(html);
+
+        Elements elements = doc.select(config.getGroupSelector().getCss());
+        for (Element element : elements) {
+            Video video = extractVideo(element);
+            videos.add(video);
+        }
+        return videos;
+    }
+
+    private Video extractVideo(Element element) {
+        String contentUrl = getForSelector(element, config.getContentUrlSelector());
+        String title = getForSelector(element, config.getTitleSelector());
+        String description = getForSelector(element, config.getDescriptionSelector());
+        String imageUrl = getForSelector(element, config.getImageSelector());
+
+        Video video = new Video();
+        video.setWebsiteName(config.getId());
+        video.setUrl(config.getDomain() + contentUrl);
+        video.setTitle(title);
+        video.setDescription(description);
+        video.setImageUrl(imageUrl);//todo still content url for some reason
+
+        return video;
+    }
+
+    private String getForSelector(Element element, Config.Selector selector) {
+        if(selector.getTag() == null) {
+            return element.select(selector.getCss()).text();
+        }
+        return element.select(config.getContentUrlSelector().getCss()).attr(config.getContentUrlSelector().getTag());
+
+    }
+}

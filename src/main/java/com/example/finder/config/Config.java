@@ -1,6 +1,5 @@
 package com.example.finder.config;
 
-import com.example.finder.model.VerificationType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,20 +10,25 @@ import java.util.List;
 @Getter @Setter
 @Configuration
 @ConfigurationProperties(prefix = "scraper")
-public class SiteConfig {
+public class Config {
     private List<Site> sites;
 
     @Getter @Setter
     public static class Site {
         private String id;
         private String name;
-        private String url;
-        private String videoGroup;
-        private String urlSelector;
-        private String titleSelector;
-        private String descriptionSelector;
-        private String imageSelector;
-        private String verificationCondition;
-        private String verificationSelector;
+        private String domain;
+        private String dataUrl;
+        private Selector groupSelector;
+        private Selector contentUrlSelector;
+        private Selector titleSelector;
+        private Selector descriptionSelector;
+        private Selector imageSelector;
+    }
+
+    @Getter @Setter
+    public static class Selector {
+        private String css;
+        private String tag;
     }
 }

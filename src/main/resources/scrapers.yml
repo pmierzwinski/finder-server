@@ -1,21 +1,18 @@
 scraper:
   sites:
     - id: youtube
-      name: youtube
-      url: "https://www.youtube.com/gaming"
-      videoGroup: "#content"
-      urlSelector: "#content"
-      titleSelector: "#content"
-      descriptionSelector: "#content"
-      imageSelector: "#content"
-      verificationCondition: "consent"
-      verificationSelector: "consent"
-
-    - id: youtube
-      name: youtube
-      url: "https://www.youtube.com/gaming"
-      videoGroup: "#content"
-      urlSelector: "#content"
-      titleSelector: "#content"
-      descriptionSelector: "#content"
-      imageSelector: "#content"
+      name: YouTube
+      domain: "https://www.youtube.com"
+      dataUrl: https://www.youtube.com/gaming
+      groupSelector:
+        css: "ytd-grid-video-renderer"
+      contentUrlSelector:
+        css: "#thumbnail"
+        tag: "href"
+      titleSelector:
+        css: "#video-title"
+      descriptionSelector:
+        css: "#channel-name #text-container a"
+      imageSelector:
+        css: "yt-image img"
+        tag: "src"
