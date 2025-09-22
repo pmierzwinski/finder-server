@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -26,6 +29,8 @@ import java.util.Objects;
 @Service
 @Getter
 public class ScrapingService {
+
+    int ACTION_RECOVERY = 500;
 
     private static final Logger log = LoggerFactory.getLogger(ScrapingService.class);
     private final VideosRepository repository;
@@ -48,6 +53,7 @@ public class ScrapingService {
                 config = xxxConfig;
                 connect();
                 verify();
+                initMoreData();
                 saveVideos();
             }
         } finally {
@@ -55,10 +61,16 @@ public class ScrapingService {
         }
     }
 
+    private void initMoreData() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("document.body.style.zoom='" + 0.5 + "'");
+        Thread.sleep(ACTION_RECOVERY);
+    }
+
     private void connect() throws InterruptedException {
         log.info("connecting to " + config.getDataUrl());
         driver.get(config.getDataUrl());
-        Thread.sleep(500);
+        Thread.sleep(ACTION_RECOVERY);
     }
 
     private void verify() throws InterruptedException {
@@ -71,12 +83,15 @@ public class ScrapingService {
             }
             log.info("clicking accept button");
             btn.click();
-            Thread.sleep(500);
+            Thread.sleep(ACTION_RECOVERY);
         } catch (NoSuchElementException ignored) {}
     }
 
     private void saveVideos() {
         String html = driver.getPageSource();
+
+        saveHtmlToFile(html, "page_dump.html");
+
         List<VideoEntity> videos = extractVideos(html);
 
         for (VideoEntity video : videos) {
@@ -84,6 +99,15 @@ public class ScrapingService {
         }
 
         repository.saveAll(videos);
+    }
+
+    private void saveHtmlToFile(String html, String fileName) {
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write(html);
+            log.info("HTML zapisany do pliku: " + fileName);
+        } catch (IOException e) {
+            log.error("Błąd przy zapisie HTML", e);
+        }
     }
 
     public void initDriver() {
@@ -95,11 +119,12 @@ public class ScrapingService {
         options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) " +
                 "Chrome/117.0.0.0 Safari/537.36");
+        options.addArguments("window-size=1920,1080");
 
         driver = new ChromeDriver(options);
     }
 
-    private WebElement findAcceptButton() {//todo
+    private WebElement findAcceptButton() {
         List<WebElement> buttons = driver.findElements(By.cssSelector("span"));
         for (WebElement btn : buttons) {
             if (btn.getText().contains("Zaakceptuj wszystko")) {
