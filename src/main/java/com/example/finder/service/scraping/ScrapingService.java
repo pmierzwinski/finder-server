@@ -89,25 +89,14 @@ public class ScrapingService {
 
     private void saveVideos() {
         String html = driver.getPageSource();
-
-        saveHtmlToFile(html, "page_dump.html");
-
         List<VideoEntity> videos = extractVideos(html);
 
         for (VideoEntity video : videos) {
             log.info(video.toString());
         }
 
+        repository.deleteAll();//todo - usun te ktore sa dobrze pobrane
         repository.saveAll(videos);
-    }
-
-    private void saveHtmlToFile(String html, String fileName) {
-        try (FileWriter writer = new FileWriter(fileName)) {
-            writer.write(html);
-            log.info("HTML zapisany do pliku: " + fileName);
-        } catch (IOException e) {
-            log.error("Błąd przy zapisie HTML", e);
-        }
     }
 
     public void initDriver() {
