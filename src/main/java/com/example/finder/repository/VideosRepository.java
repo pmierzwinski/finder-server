@@ -1,11 +1,8 @@
 package com.example.finder.repository;
 
-import com.example.finder.model.Video;
+import com.example.finder.model.VideoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
-import java.util.List;
-
-public interface VideosRepository extends JpaRepository<Video, Long> {
+public interface VideosRepository extends JpaRepository<VideoEntity, Long> {
 //    List<Video> findBySite(String site, LocalDate date);
 }
