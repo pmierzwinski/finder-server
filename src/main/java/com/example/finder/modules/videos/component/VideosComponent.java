@@ -1,19 +1,19 @@
-package com.example.finder.modules.videos.service;
+package com.example.finder.modules.videos.component;
 
 import com.example.finder.modules.videos.db.VideoRow;
 import com.example.finder.modules.videos.repository.VideosRepository;
-import com.example.finder.utils.ScrapingComponent;
+import com.example.finder.modules.scraping.ScrapingService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class VideosService {
+public class VideosComponent {
 
     private final VideosRepository videosRepository;
-    private final ScrapingComponent scrapingComponent;
+    private final ScrapingService scrapingComponent;
 
-    public VideosService(VideosRepository videosRepository, ScrapingComponent scrapingComponent) {
+    public VideosComponent(VideosRepository videosRepository, ScrapingService scrapingComponent) {
         this.videosRepository = videosRepository;
         this.scrapingComponent = scrapingComponent;
     }
@@ -30,8 +30,7 @@ public class VideosService {
     public void updateTopVideos() throws InterruptedException {
         var videos = scrapingComponent.scrapeTopVideos();
 
-
-        videosRepository.deleteAll();//todo - usun te ktore sa dobrze pobrane
+        videosRepository.deleteAll();
         videosRepository.saveAll(videos);
     }
 }

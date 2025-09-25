@@ -1,10 +1,8 @@
-package com.example.finder.utils;
+package com.example.finder.modules.scraping.component;
 
 import com.example.finder.config.Config;
 import com.example.finder.modules.videos.factory.VideoFactory;
 import com.example.finder.modules.videos.db.VideoRow;
-import com.example.finder.modules.videos.repository.VideosRepository;
-import lombok.Getter;
 import lombok.Setter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,26 +23,26 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Component
-@Getter
 public class ScrapingComponent {
 
     int ACTION_RECOVERY = 500;
 
     private static final Logger log = LoggerFactory.getLogger(ScrapingComponent.class);
-    private final VideosRepository repository;
 
     @Setter
     private Config Xconfig;
+    private final ScrapingStatusComponent scrapingStatusComponent;
     private Config.Site config;
 
     private WebDriver driver;
 
-    public ScrapingComponent(Config Xconfig, VideosRepository repository) {
-        this.repository = repository;
+    public ScrapingComponent(ScrapingStatusComponent scrapingStatusComponent, Config Xconfig) {
         this.Xconfig = Xconfig;
+        this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
     public List<VideoRow> scrapeTopVideos() throws InterruptedException {
+        var status = scrapingStatusComponent.start("youtube", "Scraping top videos...");
         initDriver();
         try {
             for (Config.Site xxxConfig : Xconfig.getSites()) {
@@ -52,13 +50,27 @@ public class ScrapingComponent {
                 connect();
                 verify();
                 initMoreData();
-                return getVideos();
+                var videos = getVideos();
+
+                scrapingStatusComponent.finishSuccess(
+                        status,
+                        videos.size(),
+                        videos.size(),
+                        0,
+                        "Update completed"
+                );
+
+                return videos;
             }
+        } catch (Exception e) {
+            scrapingStatusComponent.finishError(status, "Error: " + e.getMessage());
+            throw e;
         } finally {
             driver.quit();
         }
         return null;
     }
+
 
     private void initMoreData() throws InterruptedException {
         JavascriptExecutor js = (JavascriptExecutor) driver;
