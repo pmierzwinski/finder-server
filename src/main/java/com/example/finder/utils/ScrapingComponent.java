@@ -1,9 +1,9 @@
-package com.example.finder.service.scraping;
+package com.example.finder.utils;
 
 import com.example.finder.config.Config;
-import com.example.finder.factory.VideoFactory;
-import com.example.finder.model.VideoEntity;
-import com.example.finder.repository.VideosRepository;
+import com.example.finder.modules.videos.factory.VideoFactory;
+import com.example.finder.modules.videos.db.VideoRow;
+import com.example.finder.modules.videos.repository.VideosRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.jsoup.Jsoup;
@@ -18,21 +18,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-@Service
+@Component
 @Getter
-public class ScrapingService {
+public class ScrapingComponent {
 
     int ACTION_RECOVERY = 500;
 
-    private static final Logger log = LoggerFactory.getLogger(ScrapingService.class);
+    private static final Logger log = LoggerFactory.getLogger(ScrapingComponent.class);
     private final VideosRepository repository;
 
     @Setter
@@ -41,12 +39,12 @@ public class ScrapingService {
 
     private WebDriver driver;
 
-    public ScrapingService(Config Xconfig, VideosRepository repository) {
+    public ScrapingComponent(Config Xconfig, VideosRepository repository) {
         this.repository = repository;
         this.Xconfig = Xconfig;
     }
 
-    public void scrapeTopVideos() throws InterruptedException {
+    public List<VideoRow> scrapeTopVideos() throws InterruptedException {
         initDriver();
         try {
             for (Config.Site xxxConfig : Xconfig.getSites()) {
@@ -54,11 +52,12 @@ public class ScrapingService {
                 connect();
                 verify();
                 initMoreData();
-                saveVideos();
+                return getVideos();
             }
         } finally {
             driver.quit();
         }
+        return null;
     }
 
     private void initMoreData() throws InterruptedException {
@@ -87,16 +86,15 @@ public class ScrapingService {
         } catch (NoSuchElementException ignored) {}
     }
 
-    private void saveVideos() {
+    private List<VideoRow> getVideos() {
         String html = driver.getPageSource();
-        List<VideoEntity> videos = extractVideos(html);
+        List<VideoRow> videos = extractVideos(html);
 
-        for (VideoEntity video : videos) {
+        for (VideoRow video : videos) {
             log.info(video.toString());
         }
 
-        repository.deleteAll();//todo - usun te ktore sa dobrze pobrane
-        repository.saveAll(videos);
+        return videos;
     }
 
     public void initDriver() {
@@ -124,14 +122,14 @@ public class ScrapingService {
     }
 
 
-    private List<VideoEntity> extractVideos(String html) {
+    private List<VideoRow> extractVideos(String html) {
         log.info("extracting videos from html");
-        List<VideoEntity> videos = new java.util.ArrayList<>(List.of());
+        List<VideoRow> videos = new java.util.ArrayList<>(List.of());
         Document doc = Jsoup.parse(html);
 
         Elements elements = doc.select(config.getGroupSelector().getCss());
         for (Element element : elements) {
-            VideoEntity video = VideoFactory.fromJsoupElement(element, config);
+            VideoRow video = VideoFactory.fromJsoupElement(element, config);
             videos.add(video);
         }
         return videos.stream().filter(Objects::nonNull).toList();

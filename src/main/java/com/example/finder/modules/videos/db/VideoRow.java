@@ -1,13 +1,14 @@
-package com.example.finder.model;
+package com.example.finder.modules.videos.db;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "videos") // jawnie ustaw nazwę tabeli
 @Getter
 @NoArgsConstructor
-public class VideoEntity {
+public class VideoRow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +29,7 @@ public class VideoEntity {
     private String imageUrl;
 
 
-    public VideoEntity(String websiteName, String title, String description, String url, String imageUrl) {
+    public VideoRow(String websiteName, String title, String description, String url, String imageUrl) {
         this.websiteName = websiteName;
         this.title = title;
         this.description = description;

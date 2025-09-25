@@ -1,4 +1,6 @@
-package com.example.finder.model;
+package com.example.finder.modules.videos.model;
+
+import com.example.finder.modules.videos.db.VideoRow;
 
 public class VideoCandidate {
     String websiteName;
@@ -24,8 +26,8 @@ public class VideoCandidate {
         return s != null && !s.isBlank();
     }
 
-    public VideoEntity toEntity() {
-        return new VideoEntity(
+    public VideoRow toEntity() {
+        return new VideoRow(
                 websiteName,
                 title,
                 description,

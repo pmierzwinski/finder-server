@@ -1,13 +1,13 @@
-package com.example.finder.factory;
+package com.example.finder.modules.videos.factory;
 
 import com.example.finder.config.Config;
-import com.example.finder.model.VideoCandidate;
-import com.example.finder.model.VideoEntity;
+import com.example.finder.modules.videos.model.VideoCandidate;
+import com.example.finder.modules.videos.db.VideoRow;
 import org.jsoup.nodes.Element;
 
 public class VideoFactory {
 
-    public static VideoEntity fromJsoupElement(Element element, Config.Site config) {
+    public static VideoRow fromJsoupElement(Element element, Config.Site config) {
         VideoCandidate candidate = getCandidate(element, config);
         if(!candidate.isValid()) {
             return null;
