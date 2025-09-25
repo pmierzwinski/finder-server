@@ -16,38 +16,42 @@ public class ScrapingStatusComponent {
         this.repository = repository;
     }
 
-    public ScrapingStatusRow start(String page, String message) {
+    public ScrapingStatusRow initRunningState(String page) {
+
         ScrapingStatusRow status = new ScrapingStatusRow();
         status.setPage(page);
         status.setStartTime(LocalDateTime.now());
         status.setStatus("RUNNING");
-        status.setMessage(message);
+        status.setMessage("Scraping top videos...");
+
         return repository.save(status);
     }
 
-    public void finishSuccess(ScrapingStatusRow status, int total, int success, int failed, String message) {
+    public void finishSuccess(ScrapingStatusRow status, int total) {
         status.setEndTime(LocalDateTime.now());
         status.setTotalCount(total);
-        status.setSuccessCount(success);
-        status.setFailedCount(failed);
-        status.setStatus(failed > 0 ? "FAILED" : "SUCCESS");
-        status.setMessage(message);
+        status.setStatus("SUCCESS");
+        status.setMessage("Update completed");
         repository.save(status);
     }
 
     public void finishError(ScrapingStatusRow status, String errorMessage) {
+        if(status == null) {
+            status = new ScrapingStatusRow();
+        }
         status.setEndTime(LocalDateTime.now());
         status.setStatus("FAILED");
         status.setMessage(errorMessage);
         repository.save(status);
     }
 
-    public ScrapingStatusRow getCurrentStatus(String page) {
-        return repository.findTop1ByPageOrderByStartTimeDesc(page);
+    public List<ScrapingStatusRow> getPagesStatuses() {
+        return repository.findLatestStatusesPerPage();
     }
 
-    public List<ScrapingStatusRow> getHistory(String page) {
-        return repository.findByPageOrderByStartTimeDesc(page);
+    public List<ScrapingStatusRow> getTopPageStatuses(String page) {
+        return repository.findTop10ByPageOrderByStartTimeDesc(page);
     }
+
 }
 

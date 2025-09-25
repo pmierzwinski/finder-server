@@ -1,7 +1,7 @@
 package com.example.finder.modules.admin;
 
+import com.example.finder.modules.scraping.ScrapingService;
 import com.example.finder.modules.scraping.db.ScrapingStatusRow;
-import com.example.finder.modules.scraping.component.ScrapingStatusComponent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,20 +13,22 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminRestController {
 
-    private final ScrapingStatusComponent scrapingStatusService;
+    private final ScrapingService scrapingStatusService;
 
-    public AdminRestController(ScrapingStatusComponent scrapingStatusService) {
+    public AdminRestController(ScrapingService scrapingStatusService) {
         this.scrapingStatusService = scrapingStatusService;
     }
 
-    @GetMapping("/status/{page}/current")
-    public ScrapingStatusRow getCurrentStatus(@PathVariable String page) {
-        return scrapingStatusService.getCurrentStatus(page);
+    @GetMapping("/status")
+    public List<ScrapingStatusRow> getCurrentStatus() {
+        return scrapingStatusService.getPagesStatuses();
     }
 
-    @GetMapping("/status/{page}/history")
-    public List<ScrapingStatusRow> getHistory(@PathVariable String page) {
-        return scrapingStatusService.getHistory(page);
+    @GetMapping("/status/{page}")
+    public List<ScrapingStatusRow> getCurrentStatus(@PathVariable String page) {
+        return scrapingStatusService.getTopPageStatuses(page);
     }
+
+    //todo /datapile
 }
 

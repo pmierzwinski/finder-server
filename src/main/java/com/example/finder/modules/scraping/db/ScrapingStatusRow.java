@@ -1,6 +1,7 @@
 package com.example.finder.modules.scraping.db;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "scraping_status")
 @Setter
+@Getter
 public class ScrapingStatusRow {
 
     @Id
