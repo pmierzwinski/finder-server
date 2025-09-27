@@ -27,4 +27,38 @@ public class ScrapingStatusRow {
     private int totalCount;
     private int successCount;
     private int failedCount;
+
+
+    public ScrapingStatusRow() {}
+
+    public ScrapingStatusRow(String page) {
+        this.startTime = LocalDateTime.now();
+        this.status = Status.RUNNING;
+        this.totalCount = 0;
+        this.successCount = 0;
+        this.failedCount = 0;
+
+        this.page = page;
+        this.message = "Scraping top videos...";
+    }
+
+    public void fail(String result) {
+        this.status = Status.FAILED;
+        this.endTime = LocalDateTime.now();
+        this.message = result;
+    }
+
+    public void success(int total) {
+        this.status = Status.SUCCESS;
+        this.totalCount = total;
+        this.endTime = LocalDateTime.now();
+        this.message = "Update completed";
+    }
+
+    public class Status {
+        public static final String RUNNING = "RUNNING";
+        public static final String FAILED = "FAILED";
+        public static final String SUCCESS = "SUCCESS";
+    }
+
 }

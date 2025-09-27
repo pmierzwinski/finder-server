@@ -27,7 +27,7 @@ public class VideosComponent {
                 .orElseThrow(() -> new RuntimeException("Video not found with id: " + id));
     }
 
-    public void updateTopVideos() throws InterruptedException {
+    public void updateTopVideos() throws Exception {
         var videos = scrapingComponent.scrapeTopVideos();
 
         videosRepository.deleteAll();

@@ -5,51 +5,47 @@ import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusReposit
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ScrapingStatusComponent {
 
     private final ScrapingStatusRepository repository;
 
+    private HashMap<String, ScrapingStatusRow> running = new HashMap<>();
+
     public ScrapingStatusComponent(ScrapingStatusRepository repository) {
         this.repository = repository;
     }
 
-    public ScrapingStatusRow initRunningState(String page) {
+    public void onScrapingStarted(String page) {
+        ScrapingStatusRow status = new ScrapingStatusRow(page);
+        repository.save(status);
 
-        ScrapingStatusRow status = new ScrapingStatusRow();
-        status.setPage(page);
-        status.setStartTime(LocalDateTime.now());
-        status.setStatus("RUNNING");
-        status.setMessage("Scraping top videos...");
-
-        return repository.save(status);
+        running.put(page, status);
     }
 
-    public void finishSuccess(ScrapingStatusRow status, int total) {
-        status.setEndTime(LocalDateTime.now());
-        status.setTotalCount(total);
-        status.setStatus("SUCCESS");
-        status.setMessage("Update completed");
+    public void finishSuccess(String page, int total) {
+        ScrapingStatusRow status = running.get(page);
+        status.success(total);
+
         repository.save(status);
     }
 
-    public void finishError(ScrapingStatusRow status, String errorMessage) {
-        if(status == null) {
-            status = new ScrapingStatusRow();
-        }
-        status.setEndTime(LocalDateTime.now());
-        status.setStatus("FAILED");
-        status.setMessage(errorMessage);
+    public void finishError(String page, String errorMessage) {
+        ScrapingStatusRow status = running.get(page);
+        status.fail(errorMessage);
+
         repository.save(status);
     }
 
-    public List<ScrapingStatusRow> getPagesStatuses() {
+    public List<ScrapingStatusRow> getLastSiteStatuses() {
         return repository.findLatestStatusesPerPage();
     }
 
-    public List<ScrapingStatusRow> getTopPageStatuses(String page) {
+    public List<ScrapingStatusRow> getLastSiteStatuses(String page) {
         return repository.findTop10ByPageOrderByStartTimeDesc(page);
     }
 

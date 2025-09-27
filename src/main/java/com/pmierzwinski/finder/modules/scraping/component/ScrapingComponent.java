@@ -21,10 +21,12 @@ import java.util.Objects;
 @Component
 public class ScrapingComponent {
 
+    //todo loger to file and show it in admin
     private static final Logger log = LoggerFactory.getLogger(ScrapingComponent.class);
 
     @Setter
     private Config config;
+
     private final ScrapingStatusComponent scrapingStatusComponent;
 
     private final WebManager webManager;
@@ -36,30 +38,35 @@ public class ScrapingComponent {
         this.webManager = new WebManager();
     }
 
-    public List<VideoRow> scrapeTopVideos() throws InterruptedException {
-        List<VideoRow> videos = new ArrayList<>();
-        ScrapingStatusRow status = null;
-
+    public List<VideoRow> scrapeTopVideos() throws Exception {
         try {
+            List<VideoRow> videos = new ArrayList<>();
             for (Config.Site siteConfig : config.getSites()) {
-
-                //todo moze ten status dac jako globalny obiekt ktory sie updatuje? zeby nie zwracac
-                status = scrapingStatusComponent.initRunningState(siteConfig.getId());
-
-                var html = webManager.getSiteHtml(siteConfig);
-                var siteVideos = getVideos(html, siteConfig);
-                videos.addAll(siteVideos);
-
-                scrapingStatusComponent.finishSuccess(status, siteVideos.size());
+                videos.addAll(getFromPage(siteConfig));
             }
-        } catch (Exception e) {
-            scrapingStatusComponent.finishError(status, "Error: " + e.getMessage());
-            throw e;
+            return videos;
         } finally {
             webManager.quit();
         }
+    }
 
-        return videos;
+    private List<VideoRow> getFromPage(Config.Site siteConfig) throws Exception {
+
+        var pageId = siteConfig.getId();
+
+        scrapingStatusComponent.onScrapingStarted(siteConfig.getId());
+
+        try {
+            //todo change it to other class - the config - it should be set in constructor
+            var videos = getVideos(webManager.getSiteHtml(siteConfig), siteConfig);
+
+            scrapingStatusComponent.finishSuccess(pageId, videos.size());
+
+            return videos;
+        }  catch (Exception e) {
+            scrapingStatusComponent.finishError(pageId, "Error: " + e.getMessage());
+            throw e;
+        }
     }
 
     private List<VideoRow> getVideos(String html, Config.Site siteConfig) {

@@ -24,15 +24,15 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public List<VideoRow> scrapeTopVideos() throws InterruptedException {
+    public List<VideoRow> scrapeTopVideos() throws Exception {
         return scrapingComponent.scrapeTopVideos();
     }
 
-    public List<ScrapingStatusRow> getPagesStatuses() {
-        return scrapingStatusComponent.getPagesStatuses();
+    public List<ScrapingStatusRow> getLastScrapingStatuses() {
+        return scrapingStatusComponent.getLastSiteStatuses();
     }
 
-    public List<ScrapingStatusRow> getTopPageStatuses(String page) {
-        return scrapingStatusComponent.getTopPageStatuses(page);
+    public List<ScrapingStatusRow> getLastScrapingStatuses(String site) {
+        return scrapingStatusComponent.getLastSiteStatuses(site);
     }
 }

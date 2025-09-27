@@ -20,13 +20,13 @@ public class AdminRestController {
     }
 
     @GetMapping("/status")
-    public List<ScrapingStatusRow> getCurrentStatus() {
-        return scrapingStatusService.getPagesStatuses();
+    public List<ScrapingStatusRow> getLastScrapingStatuses() {
+        return scrapingStatusService.getLastScrapingStatuses();
     }
 
-    @GetMapping("/status/{page}")
-    public List<ScrapingStatusRow> getCurrentStatus(@PathVariable String page) {
-        return scrapingStatusService.getTopPageStatuses(page);
+    @GetMapping("/status/{site}")
+    public List<ScrapingStatusRow> getLastScrapingStatuses(@PathVariable String site) {
+        return scrapingStatusService.getLastScrapingStatuses(site);
     }
 
     //todo /datapile
