@@ -27,10 +27,14 @@ public class VideosComponent {
                 .orElseThrow(() -> new RuntimeException("Video not found with id: " + id));
     }
 
-    public void updateTopVideos() throws Exception {
-        var videos = scrapingComponent.scrapeTopVideos();
+    //todo add counter of being in top
+    //todo leave old videos but mark them as old
+    public void updateTopVideos() {
+        var videosMap = scrapingComponent.scrapeTopVideos();
 
-        videosRepository.deleteAll();
-        videosRepository.saveAll(videos);
+        videosMap.forEach((pageId, videos) -> {
+            videosRepository.deleteByPage(pageId);
+            videosRepository.saveAll(videos);
+        });
     }
 }

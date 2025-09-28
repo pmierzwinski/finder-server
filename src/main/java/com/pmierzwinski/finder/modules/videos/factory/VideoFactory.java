@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element;
 
 public class VideoFactory {
 
-    public static VideoRow fromJsoupElement(Element element, Config.Site config) {
+    public static VideoRow fromJsoupElement(Element element, Config.Page config) {
         VideoCandidate candidate = getCandidate(element, config);
         if(!candidate.isValid()) {
             return null;
@@ -16,7 +16,7 @@ public class VideoFactory {
         return candidate.toEntity();
     }
 
-    public static VideoCandidate getCandidate(Element element, Config.Site config) {
+    public static VideoCandidate getCandidate(Element element, Config.Page config) {
         return new VideoCandidate(
             config.getId(),
             getForSelector(element, config.getContentUrlSelector()),

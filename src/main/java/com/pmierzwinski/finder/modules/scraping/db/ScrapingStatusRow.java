@@ -55,10 +55,18 @@ public class ScrapingStatusRow {
         this.message = "Update completed";
     }
 
+    public void empty() {
+        this.status = Status.EMPTY;
+        this.totalCount = 0;
+        this.endTime = LocalDateTime.now();
+        this.message = "No videos found";
+    }
+
     public class Status {
         public static final String RUNNING = "RUNNING";
         public static final String FAILED = "FAILED";
         public static final String SUCCESS = "SUCCESS";
+        public static final String EMPTY = "EMPTY";
     }
 
 }

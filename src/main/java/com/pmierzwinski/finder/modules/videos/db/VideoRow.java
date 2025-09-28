@@ -14,7 +14,7 @@ public class VideoRow {
     private Long id;
 
     @Column(nullable = false)
-    private String websiteName;
+    private String page;
 
     @Column(nullable = false)
     private String title;
@@ -29,8 +29,8 @@ public class VideoRow {
     private String imageUrl;
 
 
-    public VideoRow(String websiteName, String title, String description, String url, String imageUrl) {
-        this.websiteName = websiteName;
+    public VideoRow(String page, String title, String description, String url, String imageUrl) {
+        this.page = page;
         this.title = title;
         this.description = description;
         this.url = url;
@@ -41,7 +41,7 @@ public class VideoRow {
     public String toString() {
         return "VideoEntity{" +
                 "id=" + id +
-                ", websiteName='" + websiteName + '\'' +
+                ", websiteName='" + page + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +

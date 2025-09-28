@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Getter
@@ -24,7 +25,7 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public List<VideoRow> scrapeTopVideos() throws Exception {
+    public Map<String, List<VideoRow>> scrapeTopVideos() {
         return scrapingComponent.scrapeTopVideos();
     }
 

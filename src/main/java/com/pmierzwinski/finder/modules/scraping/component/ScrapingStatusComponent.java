@@ -4,17 +4,15 @@ import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
 import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ScrapingStatusComponent {
 
     private final ScrapingStatusRepository repository;
 
-    private HashMap<String, ScrapingStatusRow> running = new HashMap<>();
+    private final HashMap<String, ScrapingStatusRow> running = new HashMap<>();
 
     public ScrapingStatusComponent(ScrapingStatusRepository repository) {
         this.repository = repository;
@@ -29,7 +27,12 @@ public class ScrapingStatusComponent {
 
     public void finishSuccess(String page, int total) {
         ScrapingStatusRow status = running.get(page);
-        status.success(total);
+
+        if(total == 0) {
+            status.empty();
+        } else {
+            status.success(total);
+        }
 
         repository.save(status);
     }

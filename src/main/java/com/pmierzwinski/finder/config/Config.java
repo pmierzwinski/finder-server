@@ -11,10 +11,10 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "scraper")
 public class Config {
-    private List<Site> sites;
+    private List<Page> pages;
 
     @Getter @Setter
-    public static class Site {
+    public static class Page {
         private String id;
         private String name;
         private String domain;

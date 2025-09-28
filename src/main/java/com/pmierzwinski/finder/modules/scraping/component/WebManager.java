@@ -1,6 +1,5 @@
-package com.pmierzwinski.finder.modules.scraping.helpers;
+package com.pmierzwinski.finder.modules.scraping.component;
 
-import com.pmierzwinski.finder.config.Config;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class WebManager {
+public class WebManager implements AutoCloseable {
 
     int ACTION_RECOVERY = 500;
 
@@ -21,8 +20,8 @@ public class WebManager {
         initDriver();
     }
 
-    public String getSiteHtml(Config.Site siteConfig) throws InterruptedException {
-        connect(siteConfig.getDataUrl());
+    public String getSiteHtml(String pageUrl) throws InterruptedException {
+        connect(pageUrl);
         verify();
         initMoreData();
 
@@ -75,7 +74,8 @@ public class WebManager {
         Thread.sleep(ACTION_RECOVERY);
     }
 
-    public void quit() {
+    @Override
+    public void close() {
         if(driver != null) {
             driver.quit();
         }
