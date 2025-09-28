@@ -1,7 +1,6 @@
 package com.pmierzwinski.finder.modules.videos;
 
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
-import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,26 +11,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/videos")
 public class VideosRestController {
-    private final VideosComponent videosComponent;
+    private final VideosService videoService;
 
-    public VideosRestController(VideosComponent videoService) {
-        this.videosComponent = videoService;
+    public VideosRestController(VideosService videoService) {
+        this.videoService = videoService;
     }
 
     @GetMapping
     public List<VideoRow> getAllVideos() {
-        return videosComponent.getAllVideos();
+        return videoService.getAllVideos();
     }
 
     //todo @tracking annotation
     @GetMapping("/{id}")
     public VideoRow getVideo(@PathVariable Long id) {
-        return videosComponent.getVideoById(id);
+        return videoService.getVideoById(id);
     }
 
     @GetMapping("/update")
-    public String updateTopVideos() throws InterruptedException {
-        videosComponent.updateTopVideos();
+    public String updateTopVideos() {
+        videoService.updateTopVideos();
         return "ok";
     }
 }

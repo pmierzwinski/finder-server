@@ -1,8 +1,8 @@
 package com.pmierzwinski.finder.modules.scraping.component;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.scraping.parsers.VideoParser;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
+import com.pmierzwinski.finder.modules.scraping.parsers.VideoParser;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public class ScrapingComponent {
 
         try (WebManager webManager = new WebManager()) {
             for (Config.Page pageConfig : config.getPages()) {
-                var videos = scrapePage(webManager, pageConfig);
+                var videos = scrapePageVideos(webManager, pageConfig);
                 if(videos.isEmpty()) {
                     continue;
                 }
@@ -34,7 +34,7 @@ public class ScrapingComponent {
         return result;
     }
 
-    private List<VideoRow> scrapePage(WebManager webManager, Config.Page pageConfig) {
+    private List<VideoRow> scrapePageVideos(WebManager webManager, Config.Page pageConfig) {
         try {
             onScrapingStarted(pageConfig.getId());
 
