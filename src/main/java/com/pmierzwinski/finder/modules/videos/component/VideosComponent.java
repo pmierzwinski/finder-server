@@ -6,16 +6,15 @@ import com.pmierzwinski.finder.modules.scraping.ScrapingService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class VideosComponent {
 
     private final VideosRepository videosRepository;
-    private final ScrapingService scrapingComponent;
 
-    public VideosComponent(VideosRepository videosRepository, ScrapingService scrapingComponent) {
+    public VideosComponent(VideosRepository videosRepository) {
         this.videosRepository = videosRepository;
-        this.scrapingComponent = scrapingComponent;
     }
 
     public List<VideoRow> getAllVideos() {
@@ -29,10 +28,8 @@ public class VideosComponent {
 
     //todo add counter of being in top
     //todo leave old videos but mark them as old
-    public void updateTopVideos() {
-        var videosMap = scrapingComponent.scrapeTopVideos();
-
-        videosMap.forEach((pageId, videos) -> {
+    public void updateTopVideos(Map<String, List<VideoRow>> newVideos) {
+        newVideos.forEach((pageId, videos) -> {
             videosRepository.deleteByPage(pageId);
             videosRepository.saveAll(videos);
         });

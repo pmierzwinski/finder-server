@@ -1,5 +1,6 @@
 package com.pmierzwinski.finder.modules.scraping;
 
+import com.pmierzwinski.finder.modules.scraping.candidate.VideoCandidate;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
@@ -25,7 +26,7 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public Map<String, List<VideoRow>> scrapeTopVideos() {
+    public Map<String, List<VideoCandidate>> scrapeTopVideos() {
         return scrapingComponent.scrapeTopVideos();
     }
 

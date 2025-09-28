@@ -1,6 +1,7 @@
 package com.pmierzwinski.finder.modules.scraping.component;
 
 import com.pmierzwinski.finder.config.Config;
+import com.pmierzwinski.finder.modules.scraping.candidate.VideoCandidate;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import com.pmierzwinski.finder.modules.scraping.parsers.VideoParser;
 import org.springframework.stereotype.Component;
@@ -17,8 +18,8 @@ public class ScrapingComponent {
         this.config = config;
     }
 
-    public Map<String, List<VideoRow>> scrapeTopVideos() {
-        Map<String, List<VideoRow>> result = new HashMap<>();
+    public Map<String, List<VideoCandidate>> scrapeTopVideos() {
+        Map<String, List<VideoCandidate>> result = new HashMap<>();
 
         try (WebManager webManager = new WebManager()) {
             for (Config.Page pageConfig : config.getPages()) {
@@ -34,12 +35,12 @@ public class ScrapingComponent {
         return result;
     }
 
-    private List<VideoRow> scrapePageVideos(WebManager webManager, Config.Page pageConfig) {
+    private List<VideoCandidate> scrapePageVideos(WebManager webManager, Config.Page pageConfig) {
         try {
             onScrapingStarted(pageConfig.getId());
 
             String html = webManager.getSiteHtml(pageConfig.getDataUrl());
-            List<VideoRow> videos = VideoParser.extractVideos(html, pageConfig);
+            List<VideoCandidate> videos = VideoParser.extractVideos(html, pageConfig);
 
             onScrapingFinished(pageConfig.getId(), videos.size());
             return videos;
