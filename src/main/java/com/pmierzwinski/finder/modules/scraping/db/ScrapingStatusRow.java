@@ -1,5 +1,6 @@
 package com.pmierzwinski.finder.modules.scraping.db;
 
+import com.pmierzwinski.finder.utils.PageId;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class ScrapingStatusRow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String page; // np. "youtube", "vimeo"
+    private String pageId; // np. "youtube", "vimeo"
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -31,14 +32,14 @@ public class ScrapingStatusRow {
 
     public ScrapingStatusRow() {}
 
-    public ScrapingStatusRow(String page) {
+    public ScrapingStatusRow(PageId pageId) {
         this.startTime = LocalDateTime.now();
         this.status = Status.RUNNING;
         this.totalCount = 0;
         this.successCount = 0;
         this.failedCount = 0;
 
-        this.page = page;
+        this.pageId = pageId.getValue();
         this.message = "Scraping top videos...";
     }
 

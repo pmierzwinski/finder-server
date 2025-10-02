@@ -1,5 +1,6 @@
-package com.pmierzwinski.finder.modules.videos;
+package com.pmierzwinski.finder.handlers;
 
+import com.pmierzwinski.finder.modules.videos.VideosService;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,10 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/videos")
-public class VideosRestController {
+public class VideosHandler {
     private final VideosService videoService;
 
-    public VideosRestController(VideosService videoService) {
+    public VideosHandler(VideosService videoService) {
         this.videoService = videoService;
     }
 
@@ -28,9 +29,4 @@ public class VideosRestController {
         return videoService.getVideoById(id);
     }
 
-    @GetMapping("/update")
-    public String updateTopVideos() {
-        videoService.updateTopVideos();
-        return "ok";
-    }
 }

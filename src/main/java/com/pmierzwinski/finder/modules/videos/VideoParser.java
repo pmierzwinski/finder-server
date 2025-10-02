@@ -1,7 +1,7 @@
-package com.pmierzwinski.finder.modules.scraping.parsers;
+package com.pmierzwinski.finder.modules.videos;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.scraping.candidate.VideoCandidate;
+import com.pmierzwinski.finder.modules.scraping.video.VideoCandidate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,7 +14,7 @@ public class VideoParser {
 
     public static List<VideoCandidate> extractVideos(String html, Config.Page config) {
         Document doc = Jsoup.parse(html);
-        Elements elements = doc.select(config.getGroupSelector().getCss());
+        Elements elements = doc.select(config.getVideoGroupSelector().getCss());
 
         return elements.stream()
                 .map(e -> VideoParser.fromJsoupElement(e, config))
@@ -23,7 +23,7 @@ public class VideoParser {
     }
 
     private static VideoCandidate fromJsoupElement(Element element, Config.Page config) {
-        VideoCandidate candidate = getCandidate(element, config);
+        VideoCandidate candidate = createCandidate(element, config);
         if(!candidate.isValid()) {
             return null;
         }
@@ -31,17 +31,17 @@ public class VideoParser {
         return candidate;
     }
 
-    private static VideoCandidate getCandidate(Element element, Config.Page config) {
+    private static VideoCandidate createCandidate(Element element, Config.Page config) {
         return new VideoCandidate(
                 config.getId(),
-                getForSelector(element, config.getContentUrlSelector()),
-                getForSelector(element, config.getTitleSelector()),
-                getForSelector(element, config.getDescriptionSelector()),
-                getForSelector(element, config.getImageSelector())
+                getForSelector(element, config.getVideoUrlSelector()),
+                getForSelector(element, config.getVideoTitleSelector()),
+                getForSelector(element, config.getVideoDescriptionSelector()),
+                getForSelector(element, config.getVideoImageSelector())
         );
     }
 
-    private static String getForSelector(Element element, Config.Selector selector) {
+    private static String getForSelector(Element element, Config.GroupSelector selector) {
         return selector.getTag() == null
                 ? element.select(selector.getCss()).text()
                 : element.select(selector.getCss()).attr(selector.getTag());

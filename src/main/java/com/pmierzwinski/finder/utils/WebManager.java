@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.component;
+package com.pmierzwinski.finder.utils;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;

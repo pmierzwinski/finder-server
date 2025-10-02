@@ -1,10 +1,9 @@
 package com.pmierzwinski.finder.modules.scraping;
 
-import com.pmierzwinski.finder.modules.scraping.candidate.VideoCandidate;
+import com.pmierzwinski.finder.utils.PageId;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
-import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Getter
+@Getter//todo is it needed?
 public class ScrapingService {
 
     ScrapingComponent scrapingComponent;
@@ -26,8 +25,8 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public Map<String, List<VideoCandidate>> scrapeTopVideos() {
-        return scrapingComponent.scrapeTopVideos();
+    public Map<PageId, String> getConfigPagesHtml() {
+        return scrapingComponent.scrapeConfigPagesHtml();
     }
 
     public List<ScrapingStatusRow> getLastScrapingStatuses() {

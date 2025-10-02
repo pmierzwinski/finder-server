@@ -1,36 +1,20 @@
 package com.pmierzwinski.finder.modules.videos;
 
-import com.pmierzwinski.finder.modules.scraping.ScrapingService;
 import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
-import com.pmierzwinski.finder.modules.videos.factory.VideoFactory;
-import org.springframework.stereotype.Component;
+import com.pmierzwinski.finder.utils.PageId;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
-@Component
+@Service
 public class VideosService {
 
     private final VideosComponent videosComponent;
-    private final ScrapingService scrapingComponent;
 
-    public VideosService(ScrapingService scrapingComponent, VideosComponent videosComponent) {
+    public VideosService(VideosComponent videosComponent) {
         this.videosComponent = videosComponent;
-        this.scrapingComponent = scrapingComponent;
-    }
-
-//    @Scheduled(fixedRate = 60000)
-    public void updateTopVideos() {
-        var videosCandidateMap = scrapingComponent.scrapeTopVideos();
-
-        var videosMap = videosCandidateMap.entrySet().stream().collect(
-                java.util.stream.Collectors.toMap(
-                        java.util.Map.Entry::getKey,
-                        entry -> entry.getValue().stream().map(VideoFactory::fromCandidate).toList()
-                )
-        );
-
-        videosComponent.updateTopVideos(videosMap);
     }
 
     public List<VideoRow> getAllVideos() {
@@ -39,6 +23,10 @@ public class VideosService {
 
     public VideoRow getVideoById(Long id) {
         return videosComponent.getVideoById(id);
+    }
+
+    public void updateTopVideos(Map<PageId, String> newVideos) {
+        videosComponent.updateTopVideos(newVideos);
     }
 }
 

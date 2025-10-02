@@ -16,7 +16,7 @@ public interface ScrapingStatusRepository extends JpaRepository<ScrapingStatusRo
     WHERE s.startTime = (
         SELECT MAX(s2.startTime)
         FROM ScrapingStatusRow s2
-        WHERE s2.page = s.page
+        WHERE s2.pageId = s.pageId
     )
     """)
     List<ScrapingStatusRow> findLatestStatusesPerPage();

@@ -1,6 +1,6 @@
 package com.pmierzwinski.finder.modules.videos.factory;
 
-import com.pmierzwinski.finder.modules.scraping.candidate.VideoCandidate;
+import com.pmierzwinski.finder.modules.scraping.video.VideoCandidate;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 
 public class VideoFactory {

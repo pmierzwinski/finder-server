@@ -1,8 +1,12 @@
 package com.pmierzwinski.finder.modules.videos.component;
 
+import com.pmierzwinski.finder.config.Config;
+import com.pmierzwinski.finder.modules.scraping.video.VideoCandidate;
+import com.pmierzwinski.finder.modules.videos.VideoParser;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
+import com.pmierzwinski.finder.modules.videos.factory.VideoFactory;
 import com.pmierzwinski.finder.modules.videos.repository.VideosRepository;
-import com.pmierzwinski.finder.modules.scraping.ScrapingService;
+import com.pmierzwinski.finder.utils.PageId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +16,11 @@ import java.util.Map;
 public class VideosComponent {
 
     private final VideosRepository videosRepository;
+    private final Config config;
 
-    public VideosComponent(VideosRepository videosRepository) {
+    public VideosComponent(VideosRepository videosRepository, Config config) {
         this.videosRepository = videosRepository;
+        this.config = config;
     }
 
     public List<VideoRow> getAllVideos() {
@@ -28,10 +34,14 @@ public class VideosComponent {
 
     //todo add counter of being in top
     //todo leave old videos but mark them as old
-    public void updateTopVideos(Map<String, List<VideoRow>> newVideos) {
-        newVideos.forEach((pageId, videos) -> {
-            videosRepository.deleteByPage(pageId);
-            videosRepository.saveAll(videos);
+    public void updateTopVideos(Map<PageId, String> newVideos) {
+        config.getPagesConfigs().forEach(pageConfig -> {
+            var pageHtml = newVideos.get(pageConfig.getId());
+            List<VideoCandidate> videos = VideoParser.extractVideos(pageHtml, pageConfig);
+            var videoRows = videos.stream().map(VideoFactory::fromCandidate).toList();
+            videosRepository.deleteByPage(pageConfig.getId().getValue());
+            videosRepository.saveAll(videoRows);
+
         });
     }
 }

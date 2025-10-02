@@ -1,5 +1,6 @@
 package com.pmierzwinski.finder.config;
 
+import com.pmierzwinski.finder.utils.PageId;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,24 +12,41 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "scraper")
 public class Config {
-    private List<Page> pages;
+
+    private List<PageConfig> pagesConfigs;
 
     @Getter @Setter
-    public static class Page {
-        private String id;
+    public static class PageConfig {
+        private PageId id;
         private String name;
         private String domain;
         private String dataUrl;
-        private Selector groupSelector;
-        private Selector contentUrlSelector;
-        private Selector titleSelector;
-        private Selector descriptionSelector;
-        private Selector imageSelector;
+        private VideoSelector videoSelector;
+        private ValidationSelector validationSelector;
     }
 
     @Getter @Setter
-    public static class Selector {
+    public static class VideoSelector {
+        private GroupSelector group;
+        private AttributeSelector url;
+        private AttributeSelector title;
+        private AttributeSelector description;
+        private AttributeSelector image;
+    }
+
+    @Getter @Setter
+    public static class ValidationSelector {
+        private GroupSelector group;
+        private AttributeSelector pick;
+    }
+
+    @Getter @Setter
+    public static class AttributeSelector extends GroupSelector {
+        private String attribute;
+    }
+
+    @Getter @Setter
+    public static class GroupSelector {
         private String css;
-        private String tag;
     }
 }

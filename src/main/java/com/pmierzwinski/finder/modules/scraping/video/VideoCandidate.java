@@ -1,6 +1,5 @@
-package com.pmierzwinski.finder.modules.scraping.candidate;
+package com.pmierzwinski.finder.modules.scraping.video;
 
-import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import lombok.Getter;
 
 @Getter
@@ -26,15 +25,5 @@ public class VideoCandidate {
 
     private boolean notBlank(String s) {
         return s != null && !s.isBlank();
-    }
-
-    public VideoRow toEntity() {
-        return new VideoRow(
-                websiteName,
-                title,
-                description,
-                contentUrl,
-                imageUrl
-        );
     }
 }
