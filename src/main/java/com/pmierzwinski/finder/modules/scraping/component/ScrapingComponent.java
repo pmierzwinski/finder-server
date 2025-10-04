@@ -1,6 +1,7 @@
 package com.pmierzwinski.finder.modules.scraping.component;
 
 import com.pmierzwinski.finder.config.Config;
+import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import com.pmierzwinski.finder.utils.PageId;
 import com.pmierzwinski.finder.utils.WebManager;
 import org.springframework.stereotype.Component;
@@ -54,6 +55,15 @@ public class ScrapingComponent {
 
     private void onScrapingFail(PageId pageId, String message) {
         scrapingStatusComponent.finishError(pageId, message);
+    }
+
+    private void test() {
+
+        var html = "<html><body><div class='video'><a href='url1' title='title1'>desc1<img src='img1'></a></div><div class='video'><a href='url2' title='title2'>desc2<img src='img2'></a></div></body></html>";
+
+        HtmlExtractor<VideoRow> htmlExtractor = new HtmlExtractor<>(VideoRow.class);
+
+
     }
 }
 

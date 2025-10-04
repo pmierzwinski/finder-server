@@ -25,7 +25,7 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public Map<PageId, String> getConfigPagesHtml() {
+    public Map<PageId, String> getElementsCandidates() {
         return scrapingComponent.scrapeConfigPagesHtml();
     }
 

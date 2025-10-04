@@ -2,8 +2,6 @@ package com.pmierzwinski.finder.handlers;
 
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
 import com.pmierzwinski.finder.modules.videos.VideosService;
-import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
-import com.pmierzwinski.finder.modules.videos.factory.VideoFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +19,7 @@ public class ScrapeTopVideosHandler {
     @GetMapping("/update")
 //    @Scheduled(fixedRate = 60000)
     public void handle() {
-        var videosCandidateMap = scrapingComponent.getConfigPagesHtml();
+        var videosCandidateMap = scrapingComponent.getElementsCandidates();
         videosService.updateTopVideos(videosCandidateMap);
     }
 
