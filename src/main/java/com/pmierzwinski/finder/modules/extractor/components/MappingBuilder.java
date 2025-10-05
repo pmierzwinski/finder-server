@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.component;
+package com.pmierzwinski.finder.modules.extractor.components;
 
 import java.util.ArrayList;
 import java.util.List;

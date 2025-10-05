@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.component;
+package com.pmierzwinski.finder.modules.extractor.components;
 
 import java.lang.reflect.Field;
 import java.util.Map;

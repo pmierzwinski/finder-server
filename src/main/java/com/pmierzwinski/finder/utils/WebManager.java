@@ -7,36 +7,48 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
 
-public class WebManager implements AutoCloseable {
+@Component
+public class WebManager {
 
     private static final Logger log = LoggerFactory.getLogger(WebManager.class);
-
     private static final int ACTION_RECOVERY = 500;
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
 
-    private WebDriver driver;
-
-    public WebManager() {
-        initDriver();
-    }
-
-    public String getSiteHtml(String pageUrl) {
+    public String getSiteHtml(String pageUrl, String verifierCss) {
+        ChromeDriver driver = null;
         try {
-            connect(pageUrl);
-            acceptCookiesIfPresent();
-            initMoreData();
+            driver = initDriver();
+            driver.get(pageUrl);
+            Thread.sleep(ACTION_RECOVERY);
+
+            acceptCookiesIfPresent(driver);
+            adjustZoom(driver);
+
+            if (verifierCss != null && !verifierCss.isBlank()) {
+                verifyPage(driver, verifierCss);
+            }
+
             return driver.getPageSource();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while fetching site: " + pageUrl, e);
+            throw new RuntimeException("Interrupted while fetching: " + pageUrl, e);
+        } catch (Exception e) {
+            throw new RuntimeException("Scraping failed for " + pageUrl + ": " + e.getMessage(), e);
+        } finally {
+            if (driver != null) {
+                try {
+                    driver.quit();
+                } catch (Exception ignored) {}
+            }
         }
     }
 
-    private void initDriver() {
+    private ChromeDriver initDriver() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--disable-gpu");
@@ -46,52 +58,35 @@ public class WebManager implements AutoCloseable {
                 "AppleWebKit/537.36 (KHTML, like Gecko) " +
                 "Chrome/117.0.0.0 Safari/537.36");
         options.addArguments("window-size=1920,1080");
-
-        driver = new ChromeDriver(options);
-        log.info("ChromeDriver started");
+        return new ChromeDriver(options);
     }
 
-    private void connect(String url) throws InterruptedException {
-        driver.get(url);
-        Thread.sleep(ACTION_RECOVERY);
-        log.debug("Connected to {}", url);
-    }
-
-    private void acceptCookiesIfPresent() throws InterruptedException {
+    private void acceptCookiesIfPresent(WebDriver driver) throws InterruptedException {
         try {
             WebDriverWait wait = new WebDriverWait(driver, DEFAULT_TIMEOUT);
             List<WebElement> buttons = driver.findElements(By.cssSelector("span"));
-
             for (WebElement btn : buttons) {
                 if (btn.getText().contains("Zaakceptuj wszystko")) {
                     wait.until(ExpectedConditions.elementToBeClickable(btn)).click();
                     Thread.sleep(ACTION_RECOVERY);
-                    log.info("Accepted cookies banner");
                     return;
                 }
             }
-        } catch (Exception e) {
-            log.debug("No cookies banner found");
-        }
+        } catch (Exception ignored) {}
     }
 
-    private void initMoreData() throws InterruptedException {
+    private void adjustZoom(WebDriver driver) throws InterruptedException {
         try {
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            js.executeScript("document.body.style.zoom='0.5'");
+            ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='0.5'");
             Thread.sleep(ACTION_RECOVERY);
-            log.debug("Adjusted page zoom for more data");
-        } catch (Exception e) {
-            log.warn("initMoreData failed: {}", e.getMessage());
-        }
+        } catch (Exception ignored) {}
     }
 
-    @Override
-    public void close() {
-        if (driver != null) {
-            driver.quit();
-            driver = null;
-            log.info("ChromeDriver closed");
+    private void verifyPage(WebDriver driver, String cssSelector) {
+        try {
+            driver.findElement(By.cssSelector(cssSelector));
+        } catch (NoSuchElementException e) {
+            throw new IllegalStateException("Verification failed: element not found (" + cssSelector + ")");
         }
     }
 }

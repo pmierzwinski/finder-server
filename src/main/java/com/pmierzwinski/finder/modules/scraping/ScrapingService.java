@@ -1,6 +1,7 @@
 package com.pmierzwinski.finder.modules.scraping;
 
-import com.pmierzwinski.finder.utils.PageId;
+import com.pmierzwinski.finder.modules.scraping.component.PageDefinition;
+import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Getter//todo is it needed?
@@ -25,8 +25,19 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public Map<PageId, String> getElementsCandidates() {
-        return scrapingComponent.scrapeConfigPagesHtml();
+    public String getPageHtml(PageDefinition definition) {
+        try {
+            onScrapingStarted(definition.getId());
+
+            var html = scrapingComponent.scrapePageHtml(definition.getDataUrl(), definition.getVerifySelector());
+
+            onScrapingFinished(definition.getId(), 0);
+
+            return html;
+        } catch (Exception e) {
+            onScrapingFail(definition.getId(), e.getMessage());
+            return "";
+        }
     }
 
     public List<ScrapingStatusRow> getLastScrapingStatuses() {
@@ -35,5 +46,18 @@ public class ScrapingService {
 
     public List<ScrapingStatusRow> getLastScrapingStatuses(String site) {
         return scrapingStatusComponent.getLastSiteStatuses(site);
+    }
+
+
+    private void onScrapingStarted(PageId pageId) {
+        scrapingStatusComponent.onScrapingStarted(pageId);
+    }
+
+    private void onScrapingFinished(PageId pageId, int videoCount) {
+        scrapingStatusComponent.finishSuccess(pageId, videoCount);
+    }
+
+    private void onScrapingFail(PageId pageId, String message) {
+        scrapingStatusComponent.finishError(pageId, message);
     }
 }

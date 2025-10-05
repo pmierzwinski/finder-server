@@ -1,6 +1,7 @@
 package com.pmierzwinski.finder.config;
 
-import com.pmierzwinski.finder.utils.PageId;
+import com.pmierzwinski.finder.modules.extractor.components.ExtractDefinition;
+import com.pmierzwinski.finder.modules.scraping.component.PageDefinition;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,40 +14,12 @@ import java.util.List;
 @ConfigurationProperties(prefix = "scraper")
 public class Config {
 
-    private List<PageConfig> pagesConfigs;
+    /** Lista konfiguracji dla poszczególnych stron */
+    private List<PageConfig> pages;
 
     @Getter @Setter
     public static class PageConfig {
-        private PageId id;
-        private String name;
-        private String domain;
-        private String dataUrl;
-        private VideoSelector videoSelector;
-        private ValidationSelector validationSelector;
-    }
-
-    @Getter @Setter
-    public static class VideoSelector {
-        private GroupSelector group;
-        private AttributeSelector url;
-        private AttributeSelector title;
-        private AttributeSelector description;
-        private AttributeSelector image;
-    }
-
-    @Getter @Setter
-    public static class ValidationSelector {
-        private GroupSelector group;
-        private AttributeSelector pick;
-    }
-
-    @Getter @Setter
-    public static class AttributeSelector extends GroupSelector {
-        private String attribute;
-    }
-
-    @Getter @Setter
-    public static class GroupSelector {
-        private String css;
+        private PageDefinition pageDefinition;
+        private ExtractDefinition scrapingObject;
     }
 }

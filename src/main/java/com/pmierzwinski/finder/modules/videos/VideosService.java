@@ -2,7 +2,7 @@ package com.pmierzwinski.finder.modules.videos;
 
 import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
-import com.pmierzwinski.finder.utils.PageId;
+import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +27,10 @@ public class VideosService {
 
     public void updateTopVideos(Map<PageId, String> newVideos) {
         videosComponent.updateTopVideos(newVideos);
+    }
+
+    public void updateVideosFor(PageId pageId, List<VideoRow> newVideos) {
+        videosComponent.updateTopVideosFor(pageId, newVideos);
     }
 }
 

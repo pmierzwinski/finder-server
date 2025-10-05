@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.component;
+package com.pmierzwinski.finder.modules.extractor.components;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,12 +15,10 @@ public class HtmlExtractor {
         this.definitions = definitions;
     }
 
-    public Map<String, String> extract(String html) {
+    public Map<String, String> extract(Element element) {
         Map<String, String> result = new HashMap<>();
-        Document doc = Jsoup.parse(html);
 
         for (FieldDefinition def : definitions) {
-            Element element = doc.selectFirst(def.selector());
             if (element != null) {
                 result.put(def.name(), element.text());
             }

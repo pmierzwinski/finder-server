@@ -1,6 +1,6 @@
 package com.pmierzwinski.finder.modules.scraping.db;
 
-import com.pmierzwinski.finder.utils.PageId;
+import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

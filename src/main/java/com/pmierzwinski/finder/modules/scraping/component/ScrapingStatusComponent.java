@@ -2,7 +2,6 @@ package com.pmierzwinski.finder.modules.scraping.component;
 
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
 import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusRepository;
-import com.pmierzwinski.finder.utils.PageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
