@@ -12,10 +12,6 @@ public class SelectorDefinition {
     private String css;
     private String tag;
 
-    public SelectorDefinition(String css) {
-        this.css = css;
-    }
-
     public String extractValue(Element element) {
         if (element == null || css == null) return null;
         Element found = element.selectFirst(css);

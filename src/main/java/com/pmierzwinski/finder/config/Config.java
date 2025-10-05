@@ -1,6 +1,6 @@
 package com.pmierzwinski.finder.config;
 
-import com.pmierzwinski.finder.modules.extractor.VideoDefinition;
+import com.pmierzwinski.finder.modules.extractor.VideoGroupDefinition;
 import com.pmierzwinski.finder.modules.scraping.component.PageDefinition;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,6 @@ public class Config {
     @Getter @Setter
     public static class PageConfig {
         private PageDefinition pageDefinition;
-        private VideoDefinition videosDefinition;
+        private VideoGroupDefinition videos;
     }
-
 }

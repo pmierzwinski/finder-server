@@ -1,11 +1,11 @@
 package com.pmierzwinski.finder.modules.extractor;
 
-import com.pmierzwinski.finder.modules.extractor.base.BaseDefinition;
+import com.pmierzwinski.finder.modules.extractor.base.BaseObjectDefinition;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class VideoDefinition extends BaseDefinition {
+public class VideoDefinition extends BaseObjectDefinition {
     private SelectorDefinition title;
     private SelectorDefinition url;
     private SelectorDefinition thumbnail;

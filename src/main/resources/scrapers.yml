@@ -5,12 +5,12 @@ scraper:
           name: Twitch
           domain: "https://www.twitch.tv"
           dataUrl: https://www.twitch.tv/directory/game/Just%20Chatting
-        videosDefinition:
+        videos:
           groupSelector: "a"
-          objectSelector:
-            - title: { css: "h3" }
-            - url: { css: "h3", tag: "text" }
-            - thumbnail: { css: "h3", tag: "text" }
-            - viewers: { css: "h3", tag: "text" }
-            - channel: { css: "h3", tag: "text" }
+          video:
+            title: { css: "h3" }
+            url: { css: "h3", tag: "text" }
+            thumbnail: { css: "h3", tag: "text" }
+            viewers: { css: "h3", tag: "text" }
+            channel: { css: "h3", tag: "text" }
 
