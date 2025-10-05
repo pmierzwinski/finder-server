@@ -19,9 +19,9 @@ public class HtmlExtractor {
         Map<String, String> result = new HashMap<>();
 
         for (FieldDefinition def : definitions) {
-            if (element != null) {
-                result.put(def.name(), element.text());
-            }
+            if (def.getSelector() == null || def.getSelector().getCss() == null) continue;
+            String value = def.getSelector().extractValue(element);
+            result.put(def.getName(), value);
         }
 
         return result;

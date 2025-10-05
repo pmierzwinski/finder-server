@@ -1,9 +1,15 @@
 package com.pmierzwinski.finder.modules.extractor.components;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-public record FieldDefinition(String name, String selector) {
-
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class FieldDefinition {
+    private String name;
+    private SelectorDefinition selector;
 }
-

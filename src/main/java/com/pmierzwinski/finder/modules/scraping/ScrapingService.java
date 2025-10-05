@@ -29,7 +29,7 @@ public class ScrapingService {
         try {
             onScrapingStarted(definition.getId());
 
-            var html = scrapingComponent.scrapePageHtml(definition.getDataUrl(), definition.getVerifySelector());
+            var html = scrapingComponent.scrapePageHtml(definition.dataUrl(), definition.verifySelector());
 
             onScrapingFinished(definition.getId(), 0);
 

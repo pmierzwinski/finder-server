@@ -1,18 +1,15 @@
 scraper:
-  sites:
-    - id: youtube
-      name: YouTube
-      domain: "https://www.youtube.com"
-      dataUrl: https://www.youtube.com/gaming
-      groupSelector:
-        css: "ytd-grid-video-renderer"
-      contentUrlSelector:
-        css: "#thumbnail"
-        tag: "href"
-      titleSelector:
-        css: "#video-title"
-      descriptionSelector:
-        css: "#channel-name #text-container a"
-      imageSelector:
-        css: "yt-image img"
-        tag: "src"
+  pages:
+      - pageDefinition:
+          id: twitch
+          name: Twitch
+          domain: "https://www.twitch.tv"
+          dataUrl: https://www.twitch.tv/directory/game/Just%20Chatting
+        videosDefinition:
+          groupSelector: "a"
+          videoDefinition:
+            - title: { css: "h3", tag: "text"}
+            - url: { css: "h3", tag: "text"}
+            - thumbnail: { css: "h3", tag: "text"}
+            - viewers: { css: "h3", tag: "text"}
+            - channel: { css: "h3", tag: "text"}
