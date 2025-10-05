@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.extractor.components;
+package com.pmierzwinski.finder.utils;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class ObjectMapper {
                     field.set(instance, converted);
 
                 } catch (NoSuchFieldException e) {
-                    // jeśli model nie ma takiego pola – pomijamy
+
                 }
             }
 

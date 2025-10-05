@@ -1,9 +1,7 @@
-package com.pmierzwinski.finder.modules.extractor.components;
+package com.pmierzwinski.finder.modules.extractor;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter @Setter
 public class VideoDataDefinition {

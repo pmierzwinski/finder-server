@@ -1,6 +1,5 @@
 package com.pmierzwinski.finder.modules.scraping.component;
 
-import com.pmierzwinski.finder.utils.WebManager;
 import org.springframework.stereotype.Component;
 
 @Component

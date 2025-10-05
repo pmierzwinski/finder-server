@@ -7,9 +7,10 @@ scraper:
           dataUrl: https://www.twitch.tv/directory/game/Just%20Chatting
         videosDefinition:
           groupSelector: "a"
-          videoDefinition:
-            - title: { css: "h3", tag: "text"}
-            - url: { css: "h3", tag: "text"}
-            - thumbnail: { css: "h3", tag: "text"}
-            - viewers: { css: "h3", tag: "text"}
-            - channel: { css: "h3", tag: "text"}
+          objectSelector:
+            - title: { css: "h3" }
+            - url: { css: "h3", tag: "text" }
+            - thumbnail: { css: "h3", tag: "text" }
+            - viewers: { css: "h3", tag: "text" }
+            - channel: { css: "h3", tag: "text" }
+

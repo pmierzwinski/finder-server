@@ -1,8 +1,8 @@
-package com.pmierzwinski.finder.modules.extractor.components;
+package com.pmierzwinski.finder.modules.extractor;
 
+import com.pmierzwinski.finder.modules.extractor.base.BaseDefinition;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter @Setter
 public class VideoDefinition extends BaseDefinition {

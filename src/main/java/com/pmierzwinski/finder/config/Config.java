@@ -1,8 +1,6 @@
 package com.pmierzwinski.finder.config;
 
-import com.pmierzwinski.finder.modules.extractor.components.DataDefinition;
-import com.pmierzwinski.finder.modules.extractor.components.FieldDefinition;
-import com.pmierzwinski.finder.modules.extractor.components.VideoDataDefinition;
+import com.pmierzwinski.finder.modules.extractor.VideoDefinition;
 import com.pmierzwinski.finder.modules.scraping.component.PageDefinition;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +21,7 @@ public class Config {
     @Getter @Setter
     public static class PageConfig {
         private PageDefinition pageDefinition;
-        private VideoDataDefinition videosDefinition;
+        private VideoDefinition videosDefinition;
     }
 
 }

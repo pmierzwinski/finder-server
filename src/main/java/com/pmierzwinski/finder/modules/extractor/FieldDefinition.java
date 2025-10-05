@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.extractor.components;
+package com.pmierzwinski.finder.modules.extractor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.pmierzwinski.finder.handlers;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.extractor.components.Extractor;
+import com.pmierzwinski.finder.modules.extractor.Extractor;
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
 import com.pmierzwinski.finder.modules.videos.VideosService;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
@@ -29,12 +29,7 @@ public class ScrapeTopVideosHandler {
         config.getPages().forEach(pageConfig -> {
             String pageHtml = scrapingService.getPageHtml(pageConfig.getPageDefinition());
 
-            Extractor<VideoRow> extractor = new Extractor<>(
-                    VideoRow.class,
-                    pageConfig.getVideosDefinition().getGroupSelector(),
-                    pageConfig.getVideosDefinition().getVideoDefinition().toFieldDefinitions()
-            );
-            List<VideoRow> videos = extractor.extract(pageHtml);
+            List<VideoRow> videos = Extractor.extract(pageHtml, VideoRow.class, pageConfig.getVideosDefinition());
 
             videosService.updateVideosFor(pageConfig.getPageDefinition().id(), videos);
         });
