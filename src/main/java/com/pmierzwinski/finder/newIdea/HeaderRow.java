@@ -1,18 +1,16 @@
-package com.pmierzwinski.finder.modules.videos.db;
+package com.pmierzwinski.finder.newIdea;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.newIdea.PageData;
-import com.pmierzwinski.finder.newIdea.ScrapedSection;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "videos")
+@Table(name = "headers")
 @Getter
 @NoArgsConstructor
-@ScrapedSection(key = "videos")
-public class VideoRow implements PageData {
+@ScrapedSection(key = "headers")
+public class HeaderRow implements PageData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +18,7 @@ public class VideoRow implements PageData {
 
     private String page;
     private String title;
-    private String description;
-    private String url;
-    private String imageUrl;
+    private String subtitle;
 
     @Override
     public void enrich(Config.PageConfig config) {

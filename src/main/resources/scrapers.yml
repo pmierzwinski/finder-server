@@ -1,16 +1,19 @@
 scraper:
   pages:
-      - pageDefinition:
-          id: twitch
-          name: Twitch
-          domain: "https://www.twitch.tv"
-          dataUrl: https://www.twitch.tv/directory/game/Just%20Chatting
-        videos:
-          groupSelector: "a"
-          video:
-            title: { css: "h3" }
-            url: { css: "h3", tag: "text" }
-            thumbnail: { css: "h3", tag: "text" }
-            viewers: { css: "h3", tag: "text" }
-            channel: { css: "h3", tag: "text" }
-
+    - id: example
+      name: Example Site
+      videos:
+        groupCss: ".video"
+        fields:
+          title:
+            css: ".title"
+            tag: "text"
+          imageUrl:
+            css: "img"
+            tag: "src"
+      headers:
+        groupCss: ".header"
+        fields:
+          title:
+            css: "h1"
+            tag: "text"

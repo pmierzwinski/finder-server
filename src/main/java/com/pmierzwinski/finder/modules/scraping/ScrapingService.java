@@ -1,5 +1,6 @@
 package com.pmierzwinski.finder.modules.scraping;
 
+import com.pmierzwinski.finder.config.Config;
 import com.pmierzwinski.finder.modules.scraping.component.PageDefinition;
 import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
@@ -25,7 +26,7 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public String getPageHtml(PageDefinition definition) {
+    public String getPageHtml(Config.PageConfig definition) {
         try {
             onScrapingStarted(definition.getId());
 

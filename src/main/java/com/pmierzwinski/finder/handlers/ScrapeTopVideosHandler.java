@@ -5,6 +5,8 @@ import com.pmierzwinski.finder.modules.extractor.Extractor;
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
 import com.pmierzwinski.finder.modules.videos.VideosService;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
+import com.pmierzwinski.finder.newIdea.GenericPageExtractor;
+import com.pmierzwinski.finder.newIdea.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,22 +18,27 @@ public class ScrapeTopVideosHandler {
     private final Config config;
     private final VideosService videosService;
     private final ScrapingService scrapingService;
+    private final GenericPageExtractor extractor;
 
-    public ScrapeTopVideosHandler(Config config, ScrapingService scrapingService, VideosService videosService) {
+    public ScrapeTopVideosHandler(Config config, ScrapingService scrapingService, VideosService videosService, GenericPageExtractor extractor) {
         this.config = config;
         this.scrapingService = scrapingService;
         this.videosService = videosService;
+        this.extractor = extractor;
     }
 
     @GetMapping("/update")
 //    @Scheduled(fixedRate = 60000)
     public void handle() {
         config.getPages().forEach(pageConfig -> {
-            String pageHtml = scrapingService.getPageHtml(pageConfig.getPageDefinition());
 
-            List<VideoRow> videos = Extractor.extract(pageHtml, VideoRow.class, pageConfig.getVideosDefinition());
+            //to one method
+            String pageHtml = scrapingService.getPageHtml(pageConfig);
+            Page page = extractor.parse(pageConfig, pageHtml);
 
-            videosService.updateVideosFor(pageConfig.getPageDefinition().id(), videos);
+            List<VideoRow> videos = page.getVideos();
+
+            videosService.updateVideosFor(pageConfig.getId(), videos);
         });
     }
 
