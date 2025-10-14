@@ -2,11 +2,9 @@ package com.pmierzwinski.finder.modules.videos;
 
 import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
-import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class VideosService {
@@ -25,11 +23,7 @@ public class VideosService {
         return videosComponent.getVideoById(id);
     }
 
-    public void updateTopVideos(Map<PageId, String> newVideos) {
-        videosComponent.updateTopVideos(newVideos);
-    }
-
-    public void updateVideosFor(PageId pageId, List<VideoRow> newVideos) {
+    public void updateVideosFor(String pageId, List<VideoRow> newVideos) {
         videosComponent.updateTopVideosFor(pageId, newVideos);
     }
 }

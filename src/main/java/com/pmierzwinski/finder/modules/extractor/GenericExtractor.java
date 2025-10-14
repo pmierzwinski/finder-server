@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.xxx;
+package com.pmierzwinski.finder.modules.extractor;
 
 import com.pmierzwinski.finder.config.Config;
 import org.jsoup.nodes.Document;
@@ -6,10 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class GenericExtractor {

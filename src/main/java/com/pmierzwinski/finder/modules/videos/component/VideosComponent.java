@@ -30,8 +30,8 @@ public class VideosComponent {
 
     //todo add counter of being in top
     //todo leave old videos but mark them as old
-    public void updateTopVideosFor(PageId pageId, List<VideoRow> newVideos) {
-        videosRepository.deleteByPage(pageId.getValue());
+    public void updateTopVideosFor(String pageId, List<VideoRow> newVideos) {
+        videosRepository.deleteByPage(pageId);
         videosRepository.saveAll(newVideos);
     }
 }

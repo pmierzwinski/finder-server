@@ -1,31 +1,16 @@
 package com.pmierzwinski.finder.modules.videos.db;
 
-import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.newIdea.PageData;
-import com.pmierzwinski.finder.newIdea.ScrapedSection;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "videos")
-@Getter
-@NoArgsConstructor
-@ScrapedSection(key = "videos")
-public class VideoRow implements PageData {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String page;
+@Getter @NoArgsConstructor
+public class VideoRow {
     private String title;
-    private String description;
-    private String url;
     private String imageUrl;
 
     @Override
-    public void enrich(Config.PageConfig config) {
-        this.page = config.getName();
+    public String toString() {
+        return "VideoRow{title='%s', imageUrl='%s'}".formatted(title, imageUrl);
     }
 }
