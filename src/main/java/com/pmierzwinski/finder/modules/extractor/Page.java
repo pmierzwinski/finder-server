@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class Page {
-    private Config.GroupDefinition<VideoRow> videos = new Config.GroupDefinition<>();
-    private Config.GroupDefinition<HeaderRow> headers = new Config.GroupDefinition<>();
+    private final Config.GroupDefinition<VideoRow> videos = new Config.VideoGroupDefinition();
+    private final Config.GroupDefinition<HeaderRow> headers = new Config.HeaderGroupDefinition();
 }
