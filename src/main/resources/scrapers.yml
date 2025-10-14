@@ -4,16 +4,14 @@ scraper:
       name: Example Site
       videos:
         groupCss: ".video"
-        fields:
-          title:
-            css: ".title"
-            tag: "text"
-          imageUrl:
-            css: "img"
-            tag: "src"
+        title:
+          css: ".title"
+          tag: "text"
+        imageUrl:
+          css: "img"
+          tag: "src"
       headers:
         groupCss: ".header"
-        fields:
-          title:
-            css: "h1"
-            tag: "text"
+        title:
+          css: "h1"
+          tag: "text"

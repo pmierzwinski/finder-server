@@ -8,8 +8,8 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,26 +25,29 @@ public class GenericPageExtractor {
         for (Field field : Page.class.getDeclaredFields()) {
             field.setAccessible(true);
 
-            Config.GroupDefinition<?> groupConfig = (Config.GroupDefinition<?>) getConfigField(config, field.getName());
-            if (groupConfig == null) continue;
+            // znajdź odpowiedni obiekt GroupDefinition z PageConfig
+            Config.GroupDefinition<?> configGroup = (Config.GroupDefinition<?>) getConfigField(config, field.getName());
+            if (configGroup == null) continue;
 
-            ParameterizedType type = (ParameterizedType) field.getGenericType();
-            Class<?> itemType = (Class<?>) type.getActualTypeArguments()[0];
-
-            List<Map<String, String>> extracted = extractor.extractToMaps(doc, groupConfig);
-
-            List<?> items = extracted.stream()
-                    .map(map -> mapper.convertValue(map, itemType))
-                    .toList();
-
+            // pobierz typ generyczny dla tej grupy
+            Config.GroupDefinition<?> pageGroup;
             try {
-                Config.GroupDefinition<?> group = (Config.GroupDefinition<?>) field.get(page);
-                group.setGroupCss(groupConfig.getGroupCss());
-                group.setFields(groupConfig.getFields());
-                group.setItems((List) items);
+                pageGroup = (Config.GroupDefinition<?>) field.get(page);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
+
+            // parsowanie HTML → mapy
+            List<Map<String, String>> extracted = extractor.extractToMaps(doc, configGroup.asFieldMap(), configGroup.getGroupCss());
+
+            // konwersja map → typy docelowe (np. VideoRow, HeaderRow)
+            List<?> items = extracted.stream()
+                    .map(map -> mapper.convertValue(map, configGroup.getTargetType()))
+                    .toList();
+
+            // przypisanie wyników do obiektu Page
+            pageGroup.setGroupCss(configGroup.getGroupCss());
+            pageGroup.setItems((List) items);
         }
 
         return page;

@@ -11,13 +11,13 @@ import java.util.*;
 @Component
 public class GenericExtractor {
 
-    public List<Map<String, String>> extractToMaps(Document doc, Config.GroupDefinition<?> def) {
+    public List<Map<String, String>> extractToMaps(Document doc, Map<String, Config.LibSelector> fields, String groupCss) {
         List<Map<String, String>> results = new ArrayList<>();
 
-        for (Element group : doc.select(def.getGroupCss())) {
+        for (Element group : doc.select(groupCss)) {
             Map<String, String> item = new LinkedHashMap<>();
 
-            def.getFields().forEach((name, sel) -> {
+            fields.forEach((name, sel) -> {
                 Elements els = group.select(sel.getCss());
                 String value = switch (sel.getTag()) {
                     case "text" -> els.text();
@@ -32,4 +32,5 @@ public class GenericExtractor {
 
         return results;
     }
+
 }
