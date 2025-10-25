@@ -6,6 +6,8 @@ import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
+import com.pmierzwinski.finder.modules.testing.ExamplePageConfig;
+import com.pmierzwinski.finder.usage.PageConfig;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public String getPageHtml(Config.PageConfig definition) {
+    public String getPageHtml(PageConfig definition) {
         try {
             onScrapingStarted(definition.getId());
 

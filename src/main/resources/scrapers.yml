@@ -1,17 +1,18 @@
 scraper:
   pages:
-    - id: example
-      name: Example Site
+    - id: "aa"
+      content-url: "some"
       videos:
-        groupCss: ".video"
-        title:
-          css: ".title"
-          tag: "text"
-        imageUrl:
-          css: "img"
-          tag: "src"
-      headers:
-        groupCss: ".header"
-        title:
-          css: "h1"
-          tag: "text"
+        group-selector:
+          css: ".a"
+        element-config:
+          title:
+            css: "aaa"
+            tag: ""
+          url:
+            css: "aaa"
+            tag: ""
+          img-url:
+            css: "aaa"
+            tag: ""
+
