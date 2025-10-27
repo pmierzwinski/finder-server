@@ -2,17 +2,18 @@ scraper:
   pages:
     - id: "aa"
       content-url: "some"
-      videos:
-        group-selector:
+      groups:
+        - videos:
+          group-selector:
           css: ".a"
-        element-config:
-          title:
-            css: "aaa"
-            tag: ""
-          url:
-            css: "aaa"
-            tag: ""
-          img-url:
-            css: "aaa"
-            tag: ""
+            element-config:
+              title:
+                css: "aaa"
+                tag: ""
+              url:
+                css: "aaa"
+                tag: ""
+              img-url:
+                css: "aaa"
+                tag: ""
 

@@ -16,18 +16,18 @@ public class ScrapingStatusComponent {
 
     private final ScrapingStatusRepository repository;
 
-    private final ConcurrentHashMap<PageId, ScrapingStatusRow> running = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ScrapingStatusRow> running = new ConcurrentHashMap<>();
 
     public ScrapingStatusComponent(ScrapingStatusRepository repository) {
         this.repository = repository;
     }
 
-    public void onScrapingStarted(PageId pageId) {
+    public void onScrapingStarted(String pageId) {
         ScrapingStatusRow status = new ScrapingStatusRow(pageId);
         repository.save(status);
 
         running.put(pageId, status);
-        log.info("Scraping started for page {}", pageId.getValue());
+        log.info("Scraping started for page {}", pageId);
     }
 
     public void finishSuccess(PageId pageId, int total) {

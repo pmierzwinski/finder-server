@@ -2,13 +2,12 @@ package com.pmierzwinski.finder.handlers;
 
 import com.pmierzwinski.finder.config.Config;
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
-import com.pmierzwinski.finder.modules.testing.VideoRow;
 import com.pmierzwinski.finder.modules.videos.VideosService;
 import com.pmierzwinski.finder.modules.extractor.GenericPageExtractor;
-import com.pmierzwinski.finder.modules.extractor.Page;
-import com.pmierzwinski.finder.scrapi.Extractor;
-import com.pmierzwinski.finder.usage.PageModel;
-import com.pmierzwinski.finder.usage.VideoModel;
+import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
+import com.pmierzwinski.finder.lib.scrapi.Extractor;
+import com.pmierzwinski.finder.modules.scraping.Page;
+import com.pmierzwinski.finder.modules.videos.db.VideoModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +33,15 @@ public class ScrapeTopVideosHandler {
     public void handle() {
         config.getPages().forEach(pageConfig -> {
             String pageHtml = scrapingService.getPageHtml(pageConfig);
-            PageModel page = (PageModel) Extractor.extract(pageHtml, pageConfig);
+
+            var config = new ConfigBuilder()
+                    .fromYml(yaml)
+                    .validate()
+                    .build();
+
+            Extractor parser = new Extractor();
+            Page page = parser.tryParse(pageHtml, config, Page.class);
+
             List<VideoModel> videos = page.getVideos();
         });
     }

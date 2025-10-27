@@ -1,13 +1,10 @@
 package com.pmierzwinski.finder.modules.scraping;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.scraping.component.PageDefinition;
 import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
-import com.pmierzwinski.finder.modules.testing.ExamplePageConfig;
-import com.pmierzwinski.finder.usage.PageConfig;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +25,7 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public String getPageHtml(PageConfig definition) {
+    public String getPageHtml(Config.PageConfig definition) {
         try {
             onScrapingStarted(definition.getId());
 
@@ -52,7 +49,7 @@ public class ScrapingService {
     }
 
 
-    private void onScrapingStarted(PageId pageId) {
+    private void onScrapingStarted(String pageId) {
         scrapingStatusComponent.onScrapingStarted(pageId);
     }
 

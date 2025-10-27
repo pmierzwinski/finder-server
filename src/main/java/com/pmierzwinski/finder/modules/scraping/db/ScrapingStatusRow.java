@@ -32,14 +32,14 @@ public class ScrapingStatusRow {
 
     public ScrapingStatusRow() {}
 
-    public ScrapingStatusRow(PageId pageId) {
+    public ScrapingStatusRow(String pageId) {
         this.startTime = LocalDateTime.now();
         this.status = Status.RUNNING;
         this.totalCount = 0;
         this.successCount = 0;
         this.failedCount = 0;
 
-        this.pageId = pageId.getValue();
+        this.pageId = pageId;
         this.message = "Scraping top videos...";
     }
 

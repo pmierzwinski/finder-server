@@ -1,0 +1,71 @@
+package com.pmierzwinski.finder.lib.scrapi;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Extractor {
+
+    private final ObjectMapper mapper = new ObjectMapper();
+
+
+    public <T> T tryParse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) {
+        try {
+            return this.parse(html, config, targetType);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    /**
+     * Typowany parser HTML → obiekt domenowy.
+     */
+    public <T> T parse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) throws Exception {
+        Map<String, List<Map<String, String>>> mapResult = parseToMap(html, config);
+        String json = mapper.writeValueAsString(mapResult);
+        return mapper.readValue(json, targetType);
+    }
+
+    /**
+     * Dynamiczny parser HTML → mapowana struktura JSON.
+     */
+    public Map<String, List<Map<String, String>>> parse(String html, Map<String, SelectorDefinition> config) {
+        return parseToMap(html, config);
+    }
+
+    /**
+     * Główna logika przetwarzania HTML.
+     */
+    private Map<String, List<Map<String, String>>> parseToMap(String html, Map<String, SelectorDefinition> config) {
+        Document doc = Jsoup.parse(html);
+        Map<String, List<Map<String, String>>> result = new LinkedHashMap<>();
+
+        for (Map.Entry<String, SelectorDefinition> entry : config.entrySet()) {
+            String key = entry.getKey();
+            SelectorDefinition def = entry.getValue();
+
+            Elements elements = doc.select(def.getListSelector());
+            List<Map<String, String>> list = new ArrayList<>();
+
+            for (Element el : elements) {
+                Map<String, String> obj = new LinkedHashMap<>();
+                for (var field : def.getFieldSelectors().entrySet()) {
+                    obj.put(field.getKey(), el.select(field.getValue()).text());
+                }
+                list.add(obj);
+            }
+
+            result.put(key, list);
+        }
+
+        return result;
+    }
+
+}
