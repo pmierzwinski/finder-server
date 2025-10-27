@@ -30,21 +30,21 @@ public class ScrapingStatusComponent {
         log.info("Scraping started for page {}", pageId);
     }
 
-    public void finishSuccess(PageId pageId, int total) {
+    public void finishSuccess(String pageId, int total) {
         updateStatus(pageId, status -> {
             if (total == 0) {
                 status.empty();
             } else {
                 status.success(total);
             }
-            log.info("Scraping success for page {} with {} videos", pageId.getValue(), total);
+            log.info("Scraping success for page {} with {} videos", pageId, total);
         });
     }
 
-    public void finishError(PageId pageId, String errorMessage) {
+    public void finishError(String pageId, String errorMessage) {
         updateStatus(pageId, status -> {
             status.fail(errorMessage);
-            log.warn("Scraping failed for page {}: {}", pageId.getValue(), errorMessage);
+            log.warn("Scraping failed for page {}: {}", pageId, errorMessage);
         });
     }
 
@@ -56,7 +56,7 @@ public class ScrapingStatusComponent {
         return repository.findTop10ByPageOrderByStartTimeDesc(page);
     }
 
-    private void updateStatus(PageId page, java.util.function.Consumer<ScrapingStatusRow> updater) {
+    private void updateStatus(String page, java.util.function.Consumer<ScrapingStatusRow> updater) {
         ScrapingStatusRow status = running.get(page);
         if (status == null) {
             log.error("No running status found for page {}. Did you forget to call onScrapingStarted?", page);

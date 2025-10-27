@@ -1,6 +1,7 @@
 package com.pmierzwinski.finder.modules.videos.component;
 
 import com.pmierzwinski.finder.config.Config;
+import com.pmierzwinski.finder.modules.videos.db.VideoModel;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import com.pmierzwinski.finder.modules.videos.repository.VideosRepository;
 import com.pmierzwinski.finder.modules.scraping.component.PageId;
@@ -30,7 +31,7 @@ public class VideosComponent {
 
     //todo add counter of being in top
     //todo leave old videos but mark them as old
-    public void updateTopVideosFor(String pageId, List<VideoRow> newVideos) {
+    public void updateTopVideosFor(String pageId, List<VideoModel> newVideos) {
         videosRepository.deleteByPage(pageId);
         videosRepository.saveAll(newVideos);
     }

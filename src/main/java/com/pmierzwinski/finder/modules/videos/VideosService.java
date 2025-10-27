@@ -1,6 +1,7 @@
 package com.pmierzwinski.finder.modules.videos;
 
 import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
+import com.pmierzwinski.finder.modules.videos.db.VideoModel;
 import com.pmierzwinski.finder.modules.videos.db.VideoRow;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class VideosService {
         return videosComponent.getVideoById(id);
     }
 
-    public void updateVideosFor(String pageId, List<VideoRow> newVideos) {
+    public void updateVideosFor(String pageId, List<VideoModel> newVideos) {
         videosComponent.updateTopVideosFor(pageId, newVideos);
     }
 }

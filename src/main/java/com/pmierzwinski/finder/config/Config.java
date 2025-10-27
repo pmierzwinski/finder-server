@@ -26,7 +26,7 @@ public class Config {
     }
 
     @Getter @Setter
-    public static class VideoModelConfig {
+    public static class VideoModelConfig {//todo maybe it should be in VideoModel - but maybe not
         ScrapiCssSelector name;
         ScrapiCssSelector url;
     }

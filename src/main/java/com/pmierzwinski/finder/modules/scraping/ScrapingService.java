@@ -1,7 +1,8 @@
 package com.pmierzwinski.finder.modules.scraping;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.scraping.component.PageId;
+import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
+import com.pmierzwinski.finder.lib.scrapi.Extractor;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
 import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
@@ -25,11 +26,20 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public String getPageHtml(Config.PageConfig definition) {
+    public Page scrapePage(Config.PageConfig pageConfig) {
+        String pageHtml = this.getPageHtml(pageConfig);
+        var config = new ConfigBuilder()
+                .fromPageConfig(pageConfig)
+                .validate()
+                .build();
+        return Extractor.tryParse(pageHtml, config, Page.class);
+    }
+
+    private String getPageHtml(Config.PageConfig definition) {
         try {
             onScrapingStarted(definition.getId());
 
-            var html = scrapingComponent.scrapePageHtml(definition.dataUrl(), definition.verifySelector());
+            var html = scrapingComponent.scrapePageHtml(definition.getDataUrl(), definition.verifySelector());
 
             onScrapingFinished(definition.getId(), 0);
 
@@ -53,11 +63,11 @@ public class ScrapingService {
         scrapingStatusComponent.onScrapingStarted(pageId);
     }
 
-    private void onScrapingFinished(PageId pageId, int videoCount) {
+    private void onScrapingFinished(String pageId, int videoCount) {
         scrapingStatusComponent.finishSuccess(pageId, videoCount);
     }
 
-    private void onScrapingFail(PageId pageId, String message) {
+    private void onScrapingFail(String pageId, String message) {
         scrapingStatusComponent.finishError(pageId, message);
     }
 }

@@ -14,12 +14,9 @@ import java.util.Map;
 
 public class Extractor {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
-
-    public <T> T tryParse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) {
+    public static <T> T tryParse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) {
         try {
-            return this.parse(html, config, targetType);
+            return Extractor.parse(html, config, targetType);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -27,7 +24,8 @@ public class Extractor {
     /**
      * Typowany parser HTML → obiekt domenowy.
      */
-    public <T> T parse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) throws Exception {
+    public static <T> T parse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
         Map<String, List<Map<String, String>>> mapResult = parseToMap(html, config);
         String json = mapper.writeValueAsString(mapResult);
         return mapper.readValue(json, targetType);
@@ -36,14 +34,14 @@ public class Extractor {
     /**
      * Dynamiczny parser HTML → mapowana struktura JSON.
      */
-    public Map<String, List<Map<String, String>>> parse(String html, Map<String, SelectorDefinition> config) {
+    public static Map<String, List<Map<String, String>>> parse(String html, Map<String, SelectorDefinition> config) {
         return parseToMap(html, config);
     }
 
     /**
      * Główna logika przetwarzania HTML.
      */
-    private Map<String, List<Map<String, String>>> parseToMap(String html, Map<String, SelectorDefinition> config) {
+    private static Map<String, List<Map<String, String>>> parseToMap(String html, Map<String, SelectorDefinition> config) {
         Document doc = Jsoup.parse(html);
         Map<String, List<Map<String, String>>> result = new LinkedHashMap<>();
 
