@@ -2,8 +2,6 @@ package com.pmierzwinski.finder.handlers;
 
 import com.pmierzwinski.finder.config.Config;
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
-import com.pmierzwinski.finder.modules.videos.VideosService;
-import com.pmierzwinski.finder.modules.extractor.GenericPageExtractor;
 import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
 import com.pmierzwinski.finder.lib.scrapi.Extractor;
 import com.pmierzwinski.finder.modules.scraping.Page;
@@ -17,15 +15,11 @@ import java.util.List;
 public class ScrapeTopVideosHandler {
 
     private final Config  config;
-    private final VideosService videosService;
     private final ScrapingService scrapingService;
-    private final GenericPageExtractor extractor;
 
-    public ScrapeTopVideosHandler(Config  config, ScrapingService scrapingService, VideosService videosService, GenericPageExtractor extractor) {
+    public ScrapeTopVideosHandler(Config  config, ScrapingService scrapingService) {
         this.config = config;
         this.scrapingService = scrapingService;
-        this.videosService = videosService;
-        this.extractor = extractor;
     }
 
     @GetMapping("/update")
@@ -35,7 +29,7 @@ public class ScrapeTopVideosHandler {
             String pageHtml = scrapingService.getPageHtml(pageConfig);
 
             var config = new ConfigBuilder()
-                    .fromYml(yaml)
+                    .fromPageConfig(pageConfig)
                     .validate()
                     .build();
 

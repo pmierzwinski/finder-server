@@ -4,6 +4,7 @@ package com.pmierzwinski.finder.lib.scrapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.yaml.snakeyaml.Yaml;
 
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -46,6 +47,51 @@ public class ConfigBuilder {
             return fromYml(content);
         else
             return fromJson(content);
+    }
+
+    public ConfigBuilder fromPageConfig(ScrapiPageConfig pageConfig) {
+        if (pageConfig == null) return this;
+
+        // 🔍 Szukamy wszystkich pól w klasie (np. videos, articles, etc.)
+        for (Field field : pageConfig.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            try {
+                Object value = field.get(pageConfig);
+                if (!(value instanceof ScrapiGroupSelector<?> groupSelector))
+                    continue;
+
+                // Nazwa sekcji = nazwa pola (np. "videos")
+                String sectionName = field.getName();
+
+                // CSS selektor listy
+                String listSelector = groupSelector.getListCssSelector();
+
+                // Obiekt z polami typu ScrapiCssSelector (np. name, url, ...)
+                Object fieldSelectorsObject = groupSelector.getFieldSelectors();
+                if (fieldSelectorsObject == null) continue;
+
+                Map<String, String> fieldSelectors = new LinkedHashMap<>();
+
+                // 🔍 Pobieramy wszystkie pola klasy generycznej (np. VideoModelConfig)
+                for (Field innerField : fieldSelectorsObject.getClass().getDeclaredFields()) {
+                    innerField.setAccessible(true);
+                    Object innerValue = innerField.get(fieldSelectorsObject);
+
+                    if (innerValue instanceof ScrapiCssSelector css) {
+                        // klucz = nazwa pola, wartość = CSS selektor
+                        fieldSelectors.put(innerField.getName(), css.getCss());
+                    }
+                }
+
+                this.addSection(sectionName, listSelector, fieldSelectors);
+
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Nie udało się przetworzyć pola: " + field.getName(), e);
+            }
+        }
+
+        return this;
     }
 
     private void parseMap(Map<String, Map<String, Object>> raw) {
