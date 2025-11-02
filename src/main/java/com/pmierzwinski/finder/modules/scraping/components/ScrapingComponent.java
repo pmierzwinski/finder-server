@@ -1,6 +1,10 @@
 package com.pmierzwinski.finder.modules.scraping.components;
 
+import com.pmierzwinski.finder.lib.scrapi.ScrapiCssSelector;
+import com.pmierzwinski.finder.lib.scrapi.WebManager;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ScrapingComponent {
@@ -10,8 +14,8 @@ public class ScrapingComponent {
         this.webManager = webManager;
     }
 
-    public String scrapePageHtml(String url, String verySelector) {
-        return webManager.getSiteHtml(url, verySelector);
+    public String scrapePageHtml(String url, List<ScrapiCssSelector> verySelectors) {
+        return webManager.getSiteHtml(url, verySelectors);
     }
 
 }

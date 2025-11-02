@@ -2,6 +2,9 @@ scraper:
   pages:
     - id: "twitch"
       data-url: "https://www.twitch.tv/"
+      verification-actions:
+        - css: ".home-feed"
+          tag: "text"
       videos:
         list-css-selector: ".video-card div .video-info"
         field-selectors:

@@ -27,20 +27,18 @@ public class ScrapingService {
     }
 
     public <T> T scrapePage(Config.PageConfig pageConfig, Class<T> clazz) {
-        String pageHtml = this.getPageHtml(pageConfig);
-
         var config = new ConfigBuilder()
                 .fromPageConfig(pageConfig)
                 .validate()
                 .build();
-        return Extractor.tryParse(pageHtml, config, clazz);
+        return Extractor.scrapePage(pageConfig, clazz);
     }
 
     private String getPageHtml(Config.PageConfig definition) {
         try {
             onScrapingStarted(definition.getId());
 
-            var html = scrapingComponent.scrapePageHtml(definition.getDataUrl(), definition.verifySelector());
+            var html = scrapingComponent.scrapePageHtml(definition.getDataUrl(), definition.getVerificationActions());
 
             onScrapingFinished(definition.getId(), 0);
 

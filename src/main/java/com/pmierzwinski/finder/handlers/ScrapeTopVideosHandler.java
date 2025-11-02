@@ -30,8 +30,8 @@ public class ScrapeTopVideosHandler {
         config.getPages().forEach(pageConfig -> {
             Page page = scrapingService.scrapePage(pageConfig, Page.class);
             videosService.updateVideosFor(
-                    pageConfig.getId(),
-                    page.getVideos().stream().map(this::toEntity).toList()
+                pageConfig.getId(),
+                page.getVideos().stream().map(this::toEntity).toList()
             );
         });
     }

@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.components;
+package com.pmierzwinski.finder.lib.scrapi;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,11 +15,10 @@ import java.util.List;
 @Component
 public class WebManager {
 
-    private static final Logger log = LoggerFactory.getLogger(WebManager.class);
     private static final int ACTION_RECOVERY = 500;
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
 
-    public String getSiteHtml(String pageUrl, String verifierCss) {
+    public String getSiteHtml(String pageUrl, List<ScrapiCssSelector> verifierCss) {
         ChromeDriver driver = null;
         try {
             driver = initDriver();
@@ -29,7 +28,7 @@ public class WebManager {
             acceptCookiesIfPresent(driver);
             adjustZoom(driver);
 
-            if (verifierCss != null && !verifierCss.isBlank()) {
+            if(!verifierCss.isEmpty()) {
                 verifyPage(driver, verifierCss);
             }
 
@@ -82,11 +81,13 @@ public class WebManager {
         } catch (Exception ignored) {}
     }
 
-    private void verifyPage(WebDriver driver, String cssSelector) {
-        try {
-            driver.findElement(By.cssSelector(cssSelector));
-        } catch (NoSuchElementException e) {
-            throw new IllegalStateException("Verification failed: element not found (" + cssSelector + ")");
-        }
+    private void verifyPage(WebDriver driver, List<ScrapiCssSelector> cssSelector) {
+        cssSelector.forEach(selector -> {
+            try {
+                driver.findElement(By.cssSelector(selector.css));
+            } catch (NoSuchElementException e) {
+                throw new IllegalStateException("Verification failed: element not found (" + selector + ")");
+            }
+        });
     }
 }

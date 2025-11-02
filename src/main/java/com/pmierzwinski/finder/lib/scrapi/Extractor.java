@@ -2,6 +2,7 @@ package com.pmierzwinski.finder.lib.scrapi;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pmierzwinski.finder.config.Config;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +14,20 @@ import java.util.List;
 import java.util.Map;
 
 public class Extractor {
+
+
+    public static <T> T scrapePage(Config.PageConfig pageConfig, Class<T> clazz) {
+        WebManager webManager = new WebManager();
+
+        String pageHtml = webManager.getSiteHtml(pageConfig.getDataUrl(), pageConfig.getVerificationActions());
+
+        var config = new ConfigBuilder()
+                .fromPageConfig(pageConfig)
+                .validate()
+                .build();
+        return Extractor.tryParse(pageHtml, config, clazz);
+    }
+
 
     public static <T> T tryParse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) {
         try {
