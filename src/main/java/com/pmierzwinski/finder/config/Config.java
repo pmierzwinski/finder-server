@@ -19,14 +19,13 @@ import java.util.List;
 public class Config {
     private List<PageConfig> pages;
 
-
     @Getter @Setter
     public static class PageConfig extends ScrapiPageConfig {
         ScrapiGroupSelector<VideoModelConfig> videos;
     }
 
     @Getter @Setter
-    public static class VideoModelConfig {//todo maybe it should be in VideoModel - but maybe not
+    public static class VideoModelConfig {
         ScrapiCssSelector name;
         ScrapiCssSelector url;
     }

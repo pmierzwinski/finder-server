@@ -1,6 +1,5 @@
-package com.pmierzwinski.finder.modules.scraping.db;
+package com.pmierzwinski.finder.modules.scraping.model;
 
-import com.pmierzwinski.finder.modules.scraping.component.PageId;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "scraping_status")
 @Setter
 @Getter
-public class ScrapingStatusRow {
+public class ScrapingStatusEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +29,9 @@ public class ScrapingStatusRow {
     private int failedCount;
 
 
-    public ScrapingStatusRow() {}
+    public ScrapingStatusEntity() {}
 
-    public ScrapingStatusRow(String pageId) {
+    public ScrapingStatusEntity(String pageId) {
         this.startTime = LocalDateTime.now();
         this.status = Status.RUNNING;
         this.totalCount = 0;

@@ -1,7 +1,7 @@
 package com.pmierzwinski.finder.handlers;
 
 import com.pmierzwinski.finder.modules.videos.VideosService;
-import com.pmierzwinski.finder.modules.videos.db.VideoRow;
+import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +19,13 @@ public class VideosHandler {
     }
 
     @GetMapping
-    public List<VideoRow> getAllVideos() {
+    public List<VideoEntity> getAllVideos() {
         return videoService.getAllVideos();
     }
 
     //todo @tracking annotation
     @GetMapping("/{id}")
-    public VideoRow getVideo(@PathVariable Long id) {
+    public VideoEntity getVideo(@PathVariable Long id) {
         return videoService.getVideoById(id);
     }
 

@@ -3,9 +3,9 @@ package com.pmierzwinski.finder.modules.scraping;
 import com.pmierzwinski.finder.config.Config;
 import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
 import com.pmierzwinski.finder.lib.scrapi.Extractor;
-import com.pmierzwinski.finder.modules.scraping.component.ScrapingComponent;
-import com.pmierzwinski.finder.modules.scraping.component.ScrapingStatusComponent;
-import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
+import com.pmierzwinski.finder.modules.scraping.components.ScrapingComponent;
+import com.pmierzwinski.finder.modules.scraping.components.ScrapingStatusComponent;
+import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +26,14 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public Page scrapePage(Config.PageConfig pageConfig) {
+    public <T> T scrapePage(Config.PageConfig pageConfig, Class<T> clazz) {
         String pageHtml = this.getPageHtml(pageConfig);
+
         var config = new ConfigBuilder()
                 .fromPageConfig(pageConfig)
                 .validate()
                 .build();
-        return Extractor.tryParse(pageHtml, config, Page.class);
+        return Extractor.tryParse(pageHtml, config, clazz);
     }
 
     private String getPageHtml(Config.PageConfig definition) {
@@ -50,11 +51,11 @@ public class ScrapingService {
         }
     }
 
-    public List<ScrapingStatusRow> getLastScrapingStatuses() {
+    public List<ScrapingStatusEntity> getLastScrapingStatuses() {
         return scrapingStatusComponent.getLastSiteStatuses();
     }
 
-    public List<ScrapingStatusRow> getLastScrapingStatuses(String site) {
+    public List<ScrapingStatusEntity> getLastScrapingStatuses(String site) {
         return scrapingStatusComponent.getLastSiteStatuses(site);
     }
 

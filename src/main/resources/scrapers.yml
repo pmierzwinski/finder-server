@@ -1,19 +1,13 @@
 scraper:
   pages:
-    - id: "aa"
-      content-url: "some"
-      groups:
-        - videos:
-          group-selector:
-          css: ".a"
-            element-config:
-              title:
-                css: "aaa"
-                tag: ""
-              url:
-                css: "aaa"
-                tag: ""
-              img-url:
-                css: "aaa"
-                tag: ""
+    - id: "twitch"
+      data-url: "https://www.twitch.tv/"
+      videos:
+        list-css-selector: ".video-card div .video-info"
+        field-selectors:
+          name:
+            css: ".video-title"
+            tag: "text"
+          url:
+            css: ".video-link"
 

@@ -1,9 +1,10 @@
 package com.pmierzwinski.finder.modules.videos.repository;
 
-import com.pmierzwinski.finder.modules.videos.db.VideoRow;
+import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-//todo change it to track old videos - so no deleteAll
-public interface VideosRepository extends JpaRepository<VideoRow, Long> {
+@Repository
+public interface VideosRepository extends JpaRepository<VideoEntity, Long> {
     void deleteByPage(String page);
 }

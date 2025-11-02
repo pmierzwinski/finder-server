@@ -1,6 +1,6 @@
-package com.pmierzwinski.finder.modules.scraping.component;
+package com.pmierzwinski.finder.modules.scraping.components;
 
-import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
+import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
 import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +16,14 @@ public class ScrapingStatusComponent {
 
     private final ScrapingStatusRepository repository;
 
-    private final ConcurrentHashMap<String, ScrapingStatusRow> running = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ScrapingStatusEntity> running = new ConcurrentHashMap<>();
 
     public ScrapingStatusComponent(ScrapingStatusRepository repository) {
         this.repository = repository;
     }
 
     public void onScrapingStarted(String pageId) {
-        ScrapingStatusRow status = new ScrapingStatusRow(pageId);
+        ScrapingStatusEntity status = new ScrapingStatusEntity(pageId);
         repository.save(status);
 
         running.put(pageId, status);
@@ -48,16 +48,16 @@ public class ScrapingStatusComponent {
         });
     }
 
-    public List<ScrapingStatusRow> getLastSiteStatuses() {
+    public List<ScrapingStatusEntity> getLastSiteStatuses() {
         return repository.findLatestStatusesPerPage();
     }
 
-    public List<ScrapingStatusRow> getLastSiteStatuses(String page) {
+    public List<ScrapingStatusEntity> getLastSiteStatuses(String page) {
         return repository.findTop10ByPageOrderByStartTimeDesc(page);
     }
 
-    private void updateStatus(String page, java.util.function.Consumer<ScrapingStatusRow> updater) {
-        ScrapingStatusRow status = running.get(page);
+    private void updateStatus(String page, java.util.function.Consumer<ScrapingStatusEntity> updater) {
+        ScrapingStatusEntity status = running.get(page);
         if (status == null) {
             log.error("No running status found for page {}. Did you forget to call onScrapingStarted?", page);
             return;

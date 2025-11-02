@@ -1,8 +1,7 @@
 package com.pmierzwinski.finder.modules.videos;
 
 import com.pmierzwinski.finder.modules.videos.component.VideosComponent;
-import com.pmierzwinski.finder.modules.videos.db.VideoModel;
-import com.pmierzwinski.finder.modules.videos.db.VideoRow;
+import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +15,15 @@ public class VideosService {
         this.videosComponent = videosComponent;
     }
 
-    public List<VideoRow> getAllVideos() {
+    public List<VideoEntity> getAllVideos() {
         return videosComponent.getAllVideos();
     }
 
-    public VideoRow getVideoById(Long id) {
+    public VideoEntity getVideoById(Long id) {
         return videosComponent.getVideoById(id);
     }
 
-    public void updateVideosFor(String pageId, List<VideoModel> newVideos) {
+    public void updateVideosFor(String pageId, List<VideoEntity> newVideos) {
         videosComponent.updateTopVideosFor(pageId, newVideos);
     }
 }

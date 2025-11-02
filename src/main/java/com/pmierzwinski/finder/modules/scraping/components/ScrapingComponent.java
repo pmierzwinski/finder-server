@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.component;
+package com.pmierzwinski.finder.modules.scraping.components;
 
 import org.springframework.stereotype.Component;
 

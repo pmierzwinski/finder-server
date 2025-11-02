@@ -1,7 +1,7 @@
 package com.pmierzwinski.finder.modules.admin;
 
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
-import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusRow;
+import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +20,12 @@ public class AdminRestController {
     }
 
     @GetMapping("/status")
-    public List<ScrapingStatusRow> getLastScrapingStatuses() {
+    public List<ScrapingStatusEntity> getLastScrapingStatuses() {
         return scrapingStatusService.getLastScrapingStatuses();
     }
 
     @GetMapping("/status/{page}")
-    public List<ScrapingStatusRow> getLastScrapingStatuses(@PathVariable String page) {
+    public List<ScrapingStatusEntity> getLastScrapingStatuses(@PathVariable String page) {
         return scrapingStatusService.getLastScrapingStatuses(page);
     }
 
