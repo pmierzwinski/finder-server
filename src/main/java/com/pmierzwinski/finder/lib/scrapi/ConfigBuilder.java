@@ -9,10 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConfigBuilder {
 
+    private String id = null;
+    private String dataUrl = null;
+    private List<ScrapiCssSelector> verificationActions = null;
     private final Map<String, SelectorDefinition> selectors = new LinkedHashMap<>();
 
     // --- Dodawanie sekcji ręcznie ---
@@ -25,7 +29,7 @@ public class ConfigBuilder {
     }
 
     // --- Wczytanie z YAML (String) ---
-    public ConfigBuilder fromYml(String yamlContent) {
+    public ConfigBuilder fromYml(String yamlContent) {//fix for id, dataUrl, verificationActions
         Yaml yaml = new Yaml();
         Map<String, Map<String, Object>> raw = yaml.load(yamlContent);
         parseMap(raw);
@@ -33,7 +37,7 @@ public class ConfigBuilder {
     }
 
     // --- Wczytanie z JSON (String) ---
-    public ConfigBuilder fromJson(String jsonContent) throws Exception {
+    public ConfigBuilder fromJson(String jsonContent) throws Exception {//fix for id, dataUrl, verificationActions
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Map<String, Object>> raw = mapper.readValue(jsonContent, Map.class);
         parseMap(raw);
@@ -41,7 +45,7 @@ public class ConfigBuilder {
     }
 
     // --- Wczytanie z pliku ---
-    public ConfigBuilder fromFile(Path path) throws Exception {
+    public ConfigBuilder fromFile(Path path) throws Exception {//fix for id, dataUrl, verificationActions
         String content = Files.readString(path);
         if (path.toString().endsWith(".yml") || path.toString().endsWith(".yaml"))
             return fromYml(content);
@@ -51,6 +55,10 @@ public class ConfigBuilder {
 
     public ConfigBuilder fromPageConfig(ScrapiPageConfig pageConfig) {
         if (pageConfig == null) return this;
+
+        id = pageConfig.getId();
+        dataUrl = pageConfig.getDataUrl();
+        verificationActions = pageConfig.getVerificationActions();
 
         // 🔍 Szukamy wszystkich pól w klasie (np. videos, articles, etc.)
         for (Field field : pageConfig.getClass().getDeclaredFields()) {
@@ -119,8 +127,13 @@ public class ConfigBuilder {
         return this;
     }
 
-    public Map<String, SelectorDefinition> build() {
-        return Collections.unmodifiableMap(selectors);
+    public ScrapiAppConfig build() {
+        return new ScrapiAppConfig(
+            id,
+            dataUrl,
+            verificationActions != null ? verificationActions : Collections.emptyList(),
+            Collections.unmodifiableMap(selectors)
+        );
     }
     
 }

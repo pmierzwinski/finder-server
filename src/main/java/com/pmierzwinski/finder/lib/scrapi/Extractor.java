@@ -16,16 +16,10 @@ import java.util.Map;
 public class Extractor {
 
 
-    public static <T> T scrapePage(Config.PageConfig pageConfig, Class<T> clazz) {
+    public static <T> T scrapePage(ScrapiAppConfig pageConfig, Class<T> clazz) {
         WebManager webManager = new WebManager();
-
-        String pageHtml = webManager.getSiteHtml(pageConfig.getDataUrl(), pageConfig.getVerificationActions());
-
-        var config = new ConfigBuilder()
-                .fromPageConfig(pageConfig)
-                .validate()
-                .build();
-        return Extractor.tryParse(pageHtml, config, clazz);
+        String pageHtml = webManager.getSiteHtml(pageConfig.dataUrl, pageConfig.verificationActions);
+        return Extractor.tryParse(pageHtml, pageConfig.pageSelectors, clazz);
     }
 
 

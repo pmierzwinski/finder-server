@@ -31,7 +31,7 @@ public class ScrapingService {
                 .fromPageConfig(pageConfig)
                 .validate()
                 .build();
-        return Extractor.scrapePage(pageConfig, clazz);
+        return Extractor.scrapePage(config, clazz);
     }
 
     private String getPageHtml(Config.PageConfig definition) {
