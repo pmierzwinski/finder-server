@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.videos.model;
+package com.pmierzwinski.finder.modules.videos.repository;
 
 import jakarta.persistence.*;
 import lombok.Getter;

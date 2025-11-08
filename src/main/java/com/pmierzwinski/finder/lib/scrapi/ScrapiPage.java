@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class ScrapiPageConfig {
+public class ScrapiPage {
     String id;
     String dataUrl;
     List<ScrapiCssSelector> verificationActions;

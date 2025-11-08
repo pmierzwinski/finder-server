@@ -1,6 +1,6 @@
 package com.pmierzwinski.finder.modules.scraping.components;
 
-import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusEntity;
 import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

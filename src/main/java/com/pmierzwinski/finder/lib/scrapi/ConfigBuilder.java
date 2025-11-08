@@ -53,7 +53,7 @@ public class ConfigBuilder {
             return fromJson(content);
     }
 
-    public ConfigBuilder fromPageConfig(ScrapiPageConfig pageConfig) {
+    public ConfigBuilder fromPageConfig(ScrapiPage pageConfig) {
         if (pageConfig == null) return this;
 
         id = pageConfig.getId();

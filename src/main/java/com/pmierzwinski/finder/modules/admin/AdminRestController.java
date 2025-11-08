@@ -1,7 +1,7 @@
 package com.pmierzwinski.finder.modules.admin;
 
 import com.pmierzwinski.finder.modules.scraping.ScrapingService;
-import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

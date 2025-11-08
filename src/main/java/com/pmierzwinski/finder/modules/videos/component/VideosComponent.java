@@ -1,7 +1,7 @@
 package com.pmierzwinski.finder.modules.videos.component;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
+import com.pmierzwinski.finder.modules.videos.repository.VideoEntity;
 import com.pmierzwinski.finder.modules.videos.repository.VideosRepository;
 import org.springframework.stereotype.Service;
 

@@ -2,9 +2,9 @@ package com.pmierzwinski.finder.lib.scrapi;
 
 public class ScrapiConfig {
     private final Object configResult; // obecny wynik z ConfigBuilder.build()
-    private final ScrapiPageConfig pageConfig;
+    private final ScrapiPage pageConfig;
 
-    public ScrapiConfig(Object configResult, ScrapiPageConfig pageConfig) {
+    public ScrapiConfig(Object configResult, ScrapiPage pageConfig) {
         this.configResult = configResult;
         this.pageConfig = pageConfig;
     }
@@ -13,7 +13,7 @@ public class ScrapiConfig {
         return configResult;
     }
 
-    public ScrapiPageConfig getPageConfig() {
+    public ScrapiPage getPageConfig() {
         return pageConfig;
     }
 }

@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.model;
+package com.pmierzwinski.finder.modules.scraping.repository;
 
 import jakarta.persistence.*;
 import lombok.Getter;

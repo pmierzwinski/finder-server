@@ -1,11 +1,12 @@
 package com.pmierzwinski.finder.modules.scraping;
 
-import com.pmierzwinski.finder.config.Config;
+import com.pmierzwinski.finder.handlers.scrapeTopVideos.config.PageConfig;
+import com.pmierzwinski.finder.handlers.scrapeTopVideos.model.PageModel;
 import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
 import com.pmierzwinski.finder.lib.scrapi.Extractor;
 import com.pmierzwinski.finder.modules.scraping.components.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.components.ScrapingStatusComponent;
-import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusEntity;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -26,27 +27,8 @@ public class ScrapingService {
         this.scrapingStatusComponent = scrapingStatusComponent;
     }
 
-    public <T> T scrapePage(Config.PageConfig pageConfig, Class<T> clazz) {
-        var config = new ConfigBuilder()
-                .fromPageConfig(pageConfig)
-                .validate()
-                .build();
-        return Extractor.scrapePage(config, clazz);
-    }
-
-    private String getPageHtml(Config.PageConfig definition) {
-        try {
-            onScrapingStarted(definition.getId());
-
-            var html = scrapingComponent.scrapePageHtml(definition.getDataUrl(), definition.getVerificationActions());
-
-            onScrapingFinished(definition.getId(), 0);
-
-            return html;
-        } catch (Exception e) {
-            onScrapingFail(definition.getId(), e.getMessage());
-            return "";
-        }
+    public PageModel scrapePage(PageConfig pageConfig) {
+        return this.scrapingComponent.scrapePage(pageConfig);
     }
 
     public List<ScrapingStatusEntity> getLastScrapingStatuses() {
@@ -56,7 +38,6 @@ public class ScrapingService {
     public List<ScrapingStatusEntity> getLastScrapingStatuses(String site) {
         return scrapingStatusComponent.getLastSiteStatuses(site);
     }
-
 
     private void onScrapingStarted(String pageId) {
         scrapingStatusComponent.onScrapingStarted(pageId);
