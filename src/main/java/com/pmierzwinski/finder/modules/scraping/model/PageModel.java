@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.handlers.scrapeTopVideos.model;
+package com.pmierzwinski.finder.modules.scraping.model;
 
 import com.pmierzwinski.finder.lib.scrapi.ScrapiPage;
 import lombok.Getter;

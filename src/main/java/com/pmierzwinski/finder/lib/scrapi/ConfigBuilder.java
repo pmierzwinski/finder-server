@@ -53,7 +53,7 @@ public class ConfigBuilder {
             return fromJson(content);
     }
 
-    public ConfigBuilder fromPageConfig(ScrapiPage pageConfig) {
+    public ConfigBuilder fromScrapiConfig(ScrapiPageConfig pageConfig) {
         if (pageConfig == null) return this;
 
         id = pageConfig.getId();
@@ -99,6 +99,8 @@ public class ConfigBuilder {
             }
         }
 
+        this.validate();
+
         return this;
     }
 
@@ -113,7 +115,7 @@ public class ConfigBuilder {
     }
 
     // --- Walidacja konfiguracji ---
-    public ConfigBuilder validate() {
+    private void validate() {
         for (var entry : selectors.entrySet()) {
             String key = entry.getKey();
             SelectorDefinition def = entry.getValue();
@@ -124,7 +126,6 @@ public class ConfigBuilder {
             if (def.getFieldSelectors() == null || def.getFieldSelectors().isEmpty())
                 throw new IllegalArgumentException("Brak fieldSelectors dla sekcji: " + key);
         }
-        return this;
     }
 
     public ScrapiAppConfig build() {

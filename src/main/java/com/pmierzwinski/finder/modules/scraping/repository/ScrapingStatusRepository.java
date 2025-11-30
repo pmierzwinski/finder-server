@@ -1,14 +1,12 @@
 package com.pmierzwinski.finder.modules.scraping.repository;
 
+import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface ScrapingStatusRepository extends JpaRepository<ScrapingStatusEntity, Long> {
-    List<ScrapingStatusEntity> findByPageOrderByStartTimeDesc(String page);
-    List<ScrapingStatusEntity> findTop10ByPageOrderByStartTimeDesc(String page);
-
     @Query("""
     SELECT s
     FROM ScrapingStatusEntity s
@@ -19,4 +17,9 @@ public interface ScrapingStatusRepository extends JpaRepository<ScrapingStatusEn
     )
     """)
     List<ScrapingStatusEntity> findLatestStatusesPerPage();
+
+    ScrapingStatusEntity findTopByPageIdOrderByStartTimeDesc(String pageId);
+
+    List<ScrapingStatusEntity> findTop10ByPageIdOrderByStartTimeDesc(String pageId);
+
 }

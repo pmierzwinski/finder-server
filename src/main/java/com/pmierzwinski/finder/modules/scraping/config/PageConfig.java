@@ -1,13 +1,13 @@
-package com.pmierzwinski.finder.handlers.scrapeTopVideos.config;
+package com.pmierzwinski.finder.modules.scraping.config;
 
 import com.pmierzwinski.finder.lib.scrapi.ScrapiGroupSelector;
-import com.pmierzwinski.finder.lib.scrapi.ScrapiPage;
+import com.pmierzwinski.finder.lib.scrapi.ScrapiPageConfig;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PageConfig extends ScrapiPage {
+public class PageConfig extends ScrapiPageConfig {
     ScrapiGroupSelector<PageVideoConfig> videos;
 }
 

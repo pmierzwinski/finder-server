@@ -2,7 +2,6 @@ package com.pmierzwinski.finder.lib.scrapi;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pmierzwinski.finder.config.Config;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,19 +12,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Extractor {
+public class Scrapi {
 
 
-    public static <T> T scrapePage(ScrapiAppConfig pageConfig, Class<T> clazz) {
+    public static <T> T scrape(ScrapiAppConfig pageConfig, Class<T> clazz) {
         WebManager webManager = new WebManager();
         String pageHtml = webManager.getSiteHtml(pageConfig.dataUrl, pageConfig.verificationActions);
-        return Extractor.tryParse(pageHtml, pageConfig.pageSelectors, clazz);
+        return Scrapi.tryParse(pageHtml, pageConfig.pageSelectors, clazz);
     }
 
 
     public static <T> T tryParse(String html, Map<String, SelectorDefinition> config, Class<T> targetType) {
         try {
-            return Extractor.parse(html, config, targetType);
+            return Scrapi.parse(html, config, targetType);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

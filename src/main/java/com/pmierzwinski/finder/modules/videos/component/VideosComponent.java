@@ -1,7 +1,9 @@
 package com.pmierzwinski.finder.modules.videos.component;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.modules.videos.repository.VideoEntity;
+import com.pmierzwinski.finder.modules.videos.mapper.VideoMapper;
+import com.pmierzwinski.finder.modules.videos.model.Video;
+import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
 import com.pmierzwinski.finder.modules.videos.repository.VideosRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 public class VideosComponent {
 
     private final VideosRepository videosRepository;
+    private final VideoMapper mapper = VideoMapper.INSTANCE;
 
     public VideosComponent(VideosRepository videosRepository, Config config) {
         this.videosRepository = videosRepository;
@@ -27,8 +30,14 @@ public class VideosComponent {
 
     //todo add counter of being in top
     //todo leave old videos but mark them as old
-    public void updateTopVideosFor(String pageId, List<VideoEntity> newVideos) {
+    public void updateTopVideosFor(String pageId, List<Video> videos) {
+
+        var entities = videos.stream()
+                .map(mapper::toEntity)
+                .toList();
+
+
         videosRepository.deleteByPage(pageId);
-        videosRepository.saveAll(newVideos);
+        videosRepository.saveAll(entities);
     }
 }

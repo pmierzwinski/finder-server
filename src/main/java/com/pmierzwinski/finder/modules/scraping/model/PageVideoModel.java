@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.handlers.scrapeTopVideos.model;
+package com.pmierzwinski.finder.modules.scraping.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,4 +8,5 @@ import lombok.Setter;
 public class PageVideoModel {
     String name;
     String url;
+    String imgUrl;
 }

@@ -1,11 +1,12 @@
-package com.pmierzwinski.finder.modules.videos.repository;
+package com.pmierzwinski.finder.modules.videos.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "videos")
 @Getter
 @Setter
 public class VideoEntity {
@@ -15,8 +16,7 @@ public class VideoEntity {
     private Long id;
 
     private String page;
-
     private String name;
-
     private String url;
+    private String imgUrl;
 }

@@ -1,53 +1,46 @@
 package com.pmierzwinski.finder.modules.scraping;
 
-import com.pmierzwinski.finder.handlers.scrapeTopVideos.config.PageConfig;
-import com.pmierzwinski.finder.handlers.scrapeTopVideos.model.PageModel;
-import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
-import com.pmierzwinski.finder.lib.scrapi.Extractor;
+import com.pmierzwinski.finder.modules.scraping.config.PageConfig;
+import com.pmierzwinski.finder.modules.scraping.model.PageModel;
 import com.pmierzwinski.finder.modules.scraping.components.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.components.ScrapingStatusComponent;
-import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusEntity;
-import lombok.Getter;
+import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Getter//todo is it needed?
 public class ScrapingService {
 
-    ScrapingComponent scrapingComponent;
-    ScrapingStatusComponent scrapingStatusComponent;
+    private final ScrapingComponent scrapingComponent;
+    private final ScrapingStatusComponent statusComponent;
 
-    ScrapingService(
+    public ScrapingService(
             ScrapingComponent scrapingComponent,
-            ScrapingStatusComponent scrapingStatusComponent
+            ScrapingStatusComponent statusComponent
     ) {
         this.scrapingComponent = scrapingComponent;
-        this.scrapingStatusComponent = scrapingStatusComponent;
+        this.statusComponent = statusComponent;
     }
 
-    public PageModel scrapePage(PageConfig pageConfig) {
-        return this.scrapingComponent.scrapePage(pageConfig);
+    public PageModel scrape(PageConfig pageConfig) {
+        statusComponent.startScraping(pageConfig.getId());
+        try {
+            var result = scrapingComponent.scrapePage(pageConfig);
+            statusComponent.finishScraping(pageConfig.getId(), result.getVideos().size());
+            return result;
+        } catch (Exception ex) {
+            statusComponent.failScraping(pageConfig.getId(), ex.getMessage());
+            throw ex;
+        }
     }
 
     public List<ScrapingStatusEntity> getLastScrapingStatuses() {
-        return scrapingStatusComponent.getLastSiteStatuses();
+        return statusComponent.getLastStatuses();
     }
 
     public List<ScrapingStatusEntity> getLastScrapingStatuses(String site) {
-        return scrapingStatusComponent.getLastSiteStatuses(site);
-    }
-
-    private void onScrapingStarted(String pageId) {
-        scrapingStatusComponent.onScrapingStarted(pageId);
-    }
-
-    private void onScrapingFinished(String pageId, int videoCount) {
-        scrapingStatusComponent.finishSuccess(pageId, videoCount);
-    }
-
-    private void onScrapingFail(String pageId, String message) {
-        scrapingStatusComponent.finishError(pageId, message);
+        return statusComponent.getLastStatuses(site);
     }
 }
+
