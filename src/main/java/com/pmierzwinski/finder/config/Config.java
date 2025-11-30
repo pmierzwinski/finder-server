@@ -1,6 +1,5 @@
 package com.pmierzwinski.finder.config;
 
-import com.pmierzwinski.finder.modules.scraping.config.PageConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

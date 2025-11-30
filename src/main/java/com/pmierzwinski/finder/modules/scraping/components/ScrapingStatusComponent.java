@@ -1,7 +1,7 @@
 package com.pmierzwinski.finder.modules.scraping.components;
 
-import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
-import com.pmierzwinski.finder.modules.scraping.repository.ScrapingStatusRepository;
+import com.pmierzwinski.finder.modules.scraping.db.entity.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.db.repository.ScrapingStatusRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

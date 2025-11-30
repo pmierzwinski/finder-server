@@ -1,10 +1,10 @@
-package com.pmierzwinski.finder.modules.scraping;
+package com.pmierzwinski.finder.modules.scraping.domain;
 
-import com.pmierzwinski.finder.modules.scraping.config.PageConfig;
-import com.pmierzwinski.finder.modules.scraping.model.PageModel;
+import com.pmierzwinski.finder.config.PageConfig;
+import com.pmierzwinski.finder.modules.scraping.domain.model.PageModel;
 import com.pmierzwinski.finder.modules.scraping.components.ScrapingComponent;
 import com.pmierzwinski.finder.modules.scraping.components.ScrapingStatusComponent;
-import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.db.entity.ScrapingStatusEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,8 @@
-package com.pmierzwinski.finder.handlers.getVideos;
+package com.pmierzwinski.finder.adapters.rest;
 
-import com.pmierzwinski.finder.modules.videos.VideosService;
-import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
+import com.pmierzwinski.finder.modules.videos.domain.VideosService;
+import com.pmierzwinski.finder.modules.videos.db.entity.VideoEntity;
+import com.pmierzwinski.finder.modules.videos.domain.model.Video;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,22 +12,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/videos")
-public class GetVideosHandler {
+public class VideosHandler {
     private final VideosService videoService;
 
-    public GetVideosHandler(VideosService videoService) {
+    public VideosHandler(VideosService videoService) {
         this.videoService = videoService;
     }
 
     @GetMapping
-    public List<VideoEntity> getAll() {
+    public List<Video> getAll() {
         return videoService.getAllVideos();
     }
-
-    //todo @tracking annotation
-    @GetMapping("/{id}")
-    public VideoEntity getById(@PathVariable Long id) {
-        return videoService.getVideoById(id);
-    }
-
 }

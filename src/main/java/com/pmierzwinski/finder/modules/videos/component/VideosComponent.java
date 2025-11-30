@@ -2,9 +2,9 @@ package com.pmierzwinski.finder.modules.videos.component;
 
 import com.pmierzwinski.finder.config.Config;
 import com.pmierzwinski.finder.modules.videos.mapper.VideoMapper;
-import com.pmierzwinski.finder.modules.videos.model.Video;
-import com.pmierzwinski.finder.modules.videos.model.VideoEntity;
-import com.pmierzwinski.finder.modules.videos.repository.VideosRepository;
+import com.pmierzwinski.finder.modules.videos.domain.model.Video;
+import com.pmierzwinski.finder.modules.videos.db.entity.VideoEntity;
+import com.pmierzwinski.finder.modules.videos.db.repository.VideosRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

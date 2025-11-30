@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.config;
+package com.pmierzwinski.finder.config;
 
 import com.pmierzwinski.finder.lib.scrapi.ScrapiCssSelector;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.videos.model;
+package com.pmierzwinski.finder.modules.videos.db.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

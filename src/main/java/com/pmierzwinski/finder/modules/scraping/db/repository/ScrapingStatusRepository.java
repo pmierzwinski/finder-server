@@ -1,6 +1,6 @@
-package com.pmierzwinski.finder.modules.scraping.repository;
+package com.pmierzwinski.finder.modules.scraping.db.repository;
 
-import com.pmierzwinski.finder.modules.scraping.model.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.db.entity.ScrapingStatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
