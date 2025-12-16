@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.domain.model;
+package com.pmierzwinski.finder.modules.scraping.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.pmierzwinski.finder.modules.scraping.db.entity;
+package com.pmierzwinski.finder.modules.scraping.db;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,12 +29,6 @@ public class ScrapingStatusEntity {
 
     private int videoCount;
 
-    public enum Status {
-        RUNNING,
-        SUCCESS,
-        FAILED
-    }
-
     public void markRunning() {
         this.startTime = LocalDateTime.now();
         this.endTime = null;
@@ -54,6 +48,12 @@ public class ScrapingStatusEntity {
         this.endTime = LocalDateTime.now();
         this.status = Status.FAILED;
         this.message = msg;
+    }
+
+    public enum Status {
+        RUNNING,
+        SUCCESS,
+        FAILED
     }
 }
 

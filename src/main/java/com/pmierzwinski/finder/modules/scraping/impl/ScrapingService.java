@@ -1,10 +1,11 @@
-package com.pmierzwinski.finder.modules.scraping.domain;
+package com.pmierzwinski.finder.modules.scraping.impl;
 
 import com.pmierzwinski.finder.config.PageConfig;
-import com.pmierzwinski.finder.modules.scraping.domain.model.PageModel;
-import com.pmierzwinski.finder.modules.scraping.components.ScrapingComponent;
-import com.pmierzwinski.finder.modules.scraping.components.ScrapingStatusComponent;
-import com.pmierzwinski.finder.modules.scraping.db.entity.ScrapingStatusEntity;
+import com.pmierzwinski.finder.lib.scrapi.ConfigBuilder;
+import com.pmierzwinski.finder.lib.scrapi.Scrapi;
+import com.pmierzwinski.finder.lib.scrapi.ScrapiPageConfig;
+import com.pmierzwinski.finder.modules.scraping.db.ScrapingStatusEntity;
+import com.pmierzwinski.finder.modules.scraping.model.PageModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,21 +13,18 @@ import java.util.List;
 @Service
 public class ScrapingService {
 
-    private final ScrapingComponent scrapingComponent;
     private final ScrapingStatusComponent statusComponent;
 
     public ScrapingService(
-            ScrapingComponent scrapingComponent,
             ScrapingStatusComponent statusComponent
     ) {
-        this.scrapingComponent = scrapingComponent;
         this.statusComponent = statusComponent;
     }
 
     public PageModel scrape(PageConfig pageConfig) {
         statusComponent.startScraping(pageConfig.getId());
         try {
-            var result = scrapingComponent.scrapePage(pageConfig);
+            var result = scrapePage(pageConfig);
             statusComponent.finishScraping(pageConfig.getId(), result.getVideos().size());
             return result;
         } catch (Exception ex) {
@@ -41,6 +39,13 @@ public class ScrapingService {
 
     public List<ScrapingStatusEntity> getLastScrapingStatuses(String site) {
         return statusComponent.getLastStatuses(site);
+    }
+
+    public PageModel scrapePage(ScrapiPageConfig config) {
+        return Scrapi.scrape(
+                new ConfigBuilder().fromScrapiConfig(config).build(),
+                PageModel.class
+        );
     }
 }
 
