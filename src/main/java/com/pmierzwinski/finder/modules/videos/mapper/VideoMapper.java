@@ -10,11 +10,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface VideoMapper {
 
-    VideoMapper INSTANCE = Mappers.getMapper(VideoMapper.class);
-
-    VideoEntity toEntity(Video video);
     Video toDomain(VideoEntity entity);
+    VideoEntity toEntity(Video video);
 
-    List<VideoEntity> toEntityList(List<Video> videos);
     List<Video> toDomainList(List<VideoEntity> entities);
+    List<VideoEntity> toEntityList(List<Video> videos);
 }

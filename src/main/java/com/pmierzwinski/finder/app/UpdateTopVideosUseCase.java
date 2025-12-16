@@ -30,7 +30,7 @@ public class UpdateTopVideosUseCase {
             var pageModel = scrapingService.scrape(pageConfig);
             var videos = scrapeMapper.toVideoList(pageModel.getVideos());
 
-            videosService.updatePageVideos(
+            videosService.updateTopVideosFor(
                     pageConfig.getId(),
                     videos
             );
