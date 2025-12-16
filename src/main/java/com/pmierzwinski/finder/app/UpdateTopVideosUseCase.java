@@ -1,11 +1,9 @@
 package com.pmierzwinski.finder.app;
 
 import com.pmierzwinski.finder.config.Config;
-import com.pmierzwinski.finder.config.PageConfig;
 import com.pmierzwinski.finder.modules.scraping.domain.ScrapingService;
-import com.pmierzwinski.finder.modules.scraping.domain.model.PageModel;
 import com.pmierzwinski.finder.modules.scraping.mapper.ScrapeMapper;
-import com.pmierzwinski.finder.modules.videos.domain.VideosService;
+import com.pmierzwinski.finder.modules.videos.impl.VideosService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,7 +28,7 @@ public class UpdateTopVideosUseCase {
             var pageModel = scrapingService.scrape(pageConfig);
             var videos = scrapeMapper.toVideoList(pageModel.getVideos());
 
-            videosService.updateTopVideosFor(
+            videosService.updatePageVideos(
                     pageConfig.getId(),
                     videos
             );
